@@ -1,0 +1,7 @@
+{
+    "python.linting.pylintEnabled": true,
+    "python.linting.enabled": false,
+    "python.pythonPath": "C:\\Users\\Pedro Lima\\.virtualenvs\\api_tcc-pqko25V7\\Scripts\\python.exe",
+    "python.linting.pylintArgs": ["--load-plugins", "pylint_flask_sqlalchemy"]
+    
+}
