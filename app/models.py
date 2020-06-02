@@ -1,17 +1,8 @@
 from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate, MigrateCommand
-from flask_script import Manager
 from run import app
 
 #instanciando o banco
 db = SQLAlchemy(app)
-
-#configurando migrações
-migrate = Migrate(app, db)
-manager = Manager(app)
-manager.add_command('db', MigrateCommand)
-
-
 
 #Tabelas
 class TipoPessoaTable(db.Model):
@@ -192,7 +183,3 @@ class ProblemaTable(db.Model):
         self.problema_idpredio = problema_idpredio
         self.problema_idapartamento = problema_idapartamento
 
-#Migrando dados
-
-if __name__ == '__main__':
-    manager.run()

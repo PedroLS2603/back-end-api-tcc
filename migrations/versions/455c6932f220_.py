@@ -1,8 +1,8 @@
-"""Instância do banco finalizada
+"""empty message
 
-Revision ID: 01b20583356e
+Revision ID: 455c6932f220
 Revises: 
-Create Date: 2020-05-29 10:57:47.187123
+Create Date: 2020-06-02 01:00:37.065094
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '01b20583356e'
+revision = '455c6932f220'
 down_revision = None
 branch_labels = None
 depends_on = None
