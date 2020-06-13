@@ -5,6 +5,14 @@ from run import app
 db = SQLAlchemy(app)
 
 #Tabelas
+
+class SysAccessTable(db.Model):
+    __tablename__ = 'sysaccess'
+
+    id = db.Column(db.Integer, primary_key=True)
+    login = db.Column(db.String(20), unique=True, nullable=False)
+    senha = db.Column(db.String(20), unique=True, nullable=False)
+
 class TipoPessoaTable(db.Model):
     __tablename__ = 'tipopessoa'
 
@@ -45,8 +53,6 @@ class FuncionarioTable(db.Model):
     __tablename__= 'funcionario'
 
     id = db.Column(db.Integer, primary_key=True)
-    login = db.Column(db.String(20), unique=True, nullable=False)
-    senha = db.Column(db.String(20), unique=True, nullable=False)
     funcionario_idpessoa = db.Column(db.Integer, db.ForeignKey('pessoa.id'), unique=True, nullable=False)
 
     def __init__(self, login, senha, funcionario_idpessoa):
