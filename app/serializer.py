@@ -1,11 +1,9 @@
 from flask_marshmallow import Marshmallow
-from run import app
-
-ma = Marshmallow(app)
+from __init__ import ma
 
 class TipoPessoaSchema(ma.Schema):
     class Meta:
-        fields = ("descricao")
+        fields = ('descricao',)
 
 class PessoaSchema(ma.Schema):
     class Meta:
@@ -17,15 +15,15 @@ class FuncionarioSchema(ma.Schema):
 
 class PredioSchema(ma.Schema):
     class Meta:
-        fields = ("evento")
+        fields = ("evento",)
 
 class ApartamentoSchema(ma.Schema):
     class Meta:
-        fields = ("apartamento_idpredio")
+        fields = ("apartamento_idpredio",)
 
 class MoradorSchema(ma.Schema):
     class Meta:
-        fields = ("morador_idapartamento". "morador_idpredio", "morador_idpessoa")
+        fields = ("morador_idapartamento", "morador_idpredio", "morador_idpessoa")
 
 class EntradaSchema(ma.Schema):
     class Meta:
@@ -37,7 +35,7 @@ class SaidaSchema(ma.Schema):
 
 class EncomendaSchema(ma.Schema):
     class Meta:
-        fields = ("encomenda_idpessoa")
+        fields = ("encomenda_idpessoa",)
 
 class EventoSchema(ma.Schema):
     class Meta:

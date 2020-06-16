@@ -1,4 +1,4 @@
-from flask import jsonify, current_app
+from flask import jsonify
 from models import SysAccessTable
 from flask_sqlalchemy import SQLAlchemy
 
@@ -14,7 +14,7 @@ class Funcionario():
     def create_account(account, psw):
         new_account = SysAccessTable(account, psw)
 
-        current_app.session.add(new_account)
-        current_app.session.commit()
+        session.add(new_account)
+        session.commit()
 
         

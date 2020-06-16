@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 455c6932f220
+Revision ID: 3812a2d64d41
 Revises: 
-Create Date: 2020-06-02 01:00:37.065094
+Create Date: 2020-06-16 16:02:48.742801
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '455c6932f220'
+revision = '3812a2d64d41'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -24,6 +24,14 @@ def upgrade():
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('evento')
     )
+    op.create_table('sysaccess',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('login', sa.String(length=20), nullable=False),
+    sa.Column('senha', sa.String(length=20), nullable=False),
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('login'),
+    sa.UniqueConstraint('senha')
+    )
     op.create_table('tipopessoa',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('descricao', sa.String(length=50), nullable=False),
@@ -32,10 +40,10 @@ def upgrade():
     )
     op.create_table('apartamento',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('apartamento_idpredio', sa.Integer(), nullable=False),
-    sa.ForeignKeyConstraint(['apartamento_idpredio'], ['predio.id'], ),
+    sa.Column('apartamento_idprd', sa.Integer(), nullable=False),
+    sa.ForeignKeyConstraint(['apartamento_idprd'], ['predio.id'], ),
     sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('apartamento_idpredio')
+    sa.UniqueConstraint('apartamento_idprd')
     )
     op.create_table('pessoa',
     sa.Column('id', sa.Integer(), nullable=False),
@@ -43,8 +51,8 @@ def upgrade():
     sa.Column('cpf', sa.String(length=14), nullable=False),
     sa.Column('rg', sa.String(length=12), nullable=False),
     sa.Column('foto', sa.String(length=80), nullable=False),
-    sa.Column('tipopessoa', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['tipopessoa'], ['tipopessoa.id'], ),
+    sa.Column('tp', sa.Integer(), nullable=True),
+    sa.ForeignKeyConstraint(['tp'], ['tipopessoa.id'], ),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('cpf'),
     sa.UniqueConstraint('foto'),
@@ -53,94 +61,90 @@ def upgrade():
     )
     op.create_table('encomenda',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('encomenda_idpessoa', sa.Integer(), nullable=False),
-    sa.ForeignKeyConstraint(['encomenda_idpessoa'], ['pessoa.id'], ),
+    sa.Column('encomenda_idpes', sa.Integer(), nullable=False),
+    sa.ForeignKeyConstraint(['encomenda_idpes'], ['pessoa.id'], ),
     sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('encomenda_idpessoa')
+    sa.UniqueConstraint('encomenda_idpes')
     )
     op.create_table('entrada',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('entrada_idapartamento', sa.Integer(), nullable=False),
-    sa.Column('entrada_idpredio', sa.Integer(), nullable=False),
-    sa.Column('entrada_idpessoa', sa.Integer(), nullable=False),
+    sa.Column('entrada_idapt', sa.Integer(), nullable=False),
+    sa.Column('entrada_idprd', sa.Integer(), nullable=False),
+    sa.Column('entrada_idpes', sa.Integer(), nullable=False),
     sa.Column('datahora', sa.DateTime(), nullable=False),
-    sa.ForeignKeyConstraint(['entrada_idapartamento'], ['apartamento.id'], ),
-    sa.ForeignKeyConstraint(['entrada_idpessoa'], ['pessoa.id'], ),
-    sa.ForeignKeyConstraint(['entrada_idpredio'], ['predio.id'], ),
+    sa.ForeignKeyConstraint(['entrada_idapt'], ['apartamento.id'], ),
+    sa.ForeignKeyConstraint(['entrada_idpes'], ['pessoa.id'], ),
+    sa.ForeignKeyConstraint(['entrada_idprd'], ['predio.id'], ),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('datahora'),
-    sa.UniqueConstraint('entrada_idapartamento'),
-    sa.UniqueConstraint('entrada_idpessoa'),
-    sa.UniqueConstraint('entrada_idpredio')
+    sa.UniqueConstraint('entrada_idapt'),
+    sa.UniqueConstraint('entrada_idpes'),
+    sa.UniqueConstraint('entrada_idprd')
     )
     op.create_table('funcionario',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('login', sa.String(length=20), nullable=False),
-    sa.Column('senha', sa.String(length=20), nullable=False),
-    sa.Column('funcionario_idpessoa', sa.Integer(), nullable=False),
-    sa.ForeignKeyConstraint(['funcionario_idpessoa'], ['pessoa.id'], ),
+    sa.Column('func_idpessoa', sa.Integer(), nullable=False),
+    sa.ForeignKeyConstraint(['func_idpessoa'], ['pessoa.id'], ),
     sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('funcionario_idpessoa'),
-    sa.UniqueConstraint('login'),
-    sa.UniqueConstraint('senha')
+    sa.UniqueConstraint('func_idpessoa')
     )
     op.create_table('morador',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('morador_idapartamento', sa.Integer(), nullable=False),
-    sa.Column('morador_idpredio', sa.Integer(), nullable=False),
-    sa.Column('morador_idpessoa', sa.Integer(), nullable=False),
-    sa.ForeignKeyConstraint(['morador_idapartamento'], ['apartamento.id'], ),
-    sa.ForeignKeyConstraint(['morador_idpessoa'], ['pessoa.id'], ),
-    sa.ForeignKeyConstraint(['morador_idpredio'], ['predio.id'], ),
+    sa.Column('morador_idapt', sa.Integer(), nullable=False),
+    sa.Column('morador_idprd', sa.Integer(), nullable=False),
+    sa.Column('morador_idpes', sa.Integer(), nullable=False),
+    sa.ForeignKeyConstraint(['morador_idapt'], ['apartamento.id'], ),
+    sa.ForeignKeyConstraint(['morador_idpes'], ['pessoa.id'], ),
+    sa.ForeignKeyConstraint(['morador_idprd'], ['predio.id'], ),
     sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('morador_idapartamento'),
-    sa.UniqueConstraint('morador_idpessoa'),
-    sa.UniqueConstraint('morador_idpredio')
+    sa.UniqueConstraint('morador_idapt'),
+    sa.UniqueConstraint('morador_idpes'),
+    sa.UniqueConstraint('morador_idprd')
     )
     op.create_table('problema',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('descricao', sa.String(length=200), nullable=False),
-    sa.Column('problema_idpredio', sa.Integer(), nullable=False),
-    sa.Column('problema_idapartamento', sa.Integer(), nullable=False),
-    sa.ForeignKeyConstraint(['problema_idapartamento'], ['apartamento.id'], ),
-    sa.ForeignKeyConstraint(['problema_idpredio'], ['predio.id'], ),
+    sa.Column('problema_idprd', sa.Integer(), nullable=False),
+    sa.Column('problema_idapt', sa.Integer(), nullable=False),
+    sa.ForeignKeyConstraint(['problema_idapt'], ['apartamento.id'], ),
+    sa.ForeignKeyConstraint(['problema_idprd'], ['predio.id'], ),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('descricao'),
-    sa.UniqueConstraint('problema_idapartamento'),
-    sa.UniqueConstraint('problema_idpredio')
+    sa.UniqueConstraint('problema_idapt'),
+    sa.UniqueConstraint('problema_idprd')
     )
     op.create_table('evento',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('datahora', sa.DateTime(), nullable=False),
-    sa.Column('evento_idmorador', sa.Integer(), nullable=False),
-    sa.Column('evento_idpredio', sa.Integer(), nullable=False),
-    sa.ForeignKeyConstraint(['evento_idmorador'], ['morador.id'], ),
-    sa.ForeignKeyConstraint(['evento_idpredio'], ['predio.id'], ),
+    sa.Column('evento_idmrd', sa.Integer(), nullable=False),
+    sa.Column('evento_idprd', sa.Integer(), nullable=False),
+    sa.ForeignKeyConstraint(['evento_idmrd'], ['morador.id'], ),
+    sa.ForeignKeyConstraint(['evento_idprd'], ['predio.id'], ),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('datahora'),
-    sa.UniqueConstraint('evento_idmorador'),
-    sa.UniqueConstraint('evento_idpredio')
+    sa.UniqueConstraint('evento_idmrd'),
+    sa.UniqueConstraint('evento_idprd')
     )
     op.create_table('saida',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('saida_idpessoa', sa.Integer(), nullable=False),
-    sa.Column('saida_identrada', sa.Integer(), nullable=True),
+    sa.Column('saida_idpes', sa.Integer(), nullable=False),
+    sa.Column('saida_ident', sa.Integer(), nullable=True),
     sa.Column('datahora', sa.DateTime(), nullable=False),
-    sa.ForeignKeyConstraint(['saida_identrada'], ['entrada.id'], ),
-    sa.ForeignKeyConstraint(['saida_idpessoa'], ['pessoa.id'], ),
+    sa.ForeignKeyConstraint(['saida_ident'], ['entrada.id'], ),
+    sa.ForeignKeyConstraint(['saida_idpes'], ['pessoa.id'], ),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('datahora'),
-    sa.UniqueConstraint('saida_identrada'),
-    sa.UniqueConstraint('saida_idpessoa')
+    sa.UniqueConstraint('saida_ident'),
+    sa.UniqueConstraint('saida_idpes')
     )
     op.create_table('listaconvidados',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('nome', sa.String(length=45), nullable=False),
     sa.Column('rg', sa.String(length=12), nullable=False),
-    sa.Column('listaconvidados_idevento', sa.Integer(), nullable=False),
-    sa.ForeignKeyConstraint(['listaconvidados_idevento'], ['evento.id'], ),
+    sa.Column('listaconvidados_idevt', sa.Integer(), nullable=False),
+    sa.ForeignKeyConstraint(['listaconvidados_idevt'], ['evento.id'], ),
     sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('listaconvidados_idevento'),
+    sa.UniqueConstraint('listaconvidados_idevt'),
     sa.UniqueConstraint('nome'),
     sa.UniqueConstraint('rg')
     )
@@ -160,5 +164,6 @@ def downgrade():
     op.drop_table('pessoa')
     op.drop_table('apartamento')
     op.drop_table('tipopessoa')
+    op.drop_table('sysaccess')
     op.drop_table('predio')
     # ### end Alembic commands ###

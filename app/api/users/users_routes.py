@@ -1,4 +1,4 @@
-from flask import flask, request, jsonify, current_app
+from flask import flask, request, jsonify 
 from flask_blueprint import Blueprint
 from flask_sqlalchemy import SQLAlchemy
 from models import PessoaTable, TipoPessoaTable
@@ -37,8 +37,8 @@ def create():
 
     new_user = PessoaTable(nome, cpf, rg, ft, tp)
 
-    current_app.db.session.add(new_user)
-    current_app.db.session.commit()
+    db.session.add(new_user)
+    db.session.commit()
 
 @bp_users.route('/user/alterar/<id>', methods['PUT'])
 def update(id):
@@ -63,7 +63,7 @@ def update(id):
     user.ft = ft
     user.tp = tp
 
-    current_app.db.session.commit()
+    db.session.commit()
 
     return jsonify('Usuário deletado com sucesso!')
     
@@ -71,7 +71,7 @@ def update(id):
 def delete(id):
     user = PessoaTable.query.get(id)
 
-    current_app.db.session.delete(user)
+    db.session.delete(user)
 
     return jsonify('Usuário deletado com sucesso!')
     
