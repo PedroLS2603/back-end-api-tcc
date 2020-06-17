@@ -40,11 +40,13 @@ class PessoaTable(db.Model):
     saida_idpessoa = db.relationship('SaidaTable', backref='saida_idpessoa')
     encomenda_idpessoa = db.relationship('EncomendaTable', backref='encomenda_idpessoa')
 
-    def __init__(self, nome, cpf, rg, foto):
+    def __init__(self, nome, cpf, rg, foto, tp):
         self.nome = nome
         self.cpf = cpf
         self.rg = rg
         self.foto = foto
+        self.tp = tp
+        
 
 class FuncionarioTable(db.Model):
     __tablename__= 'funcionario'

@@ -15,7 +15,7 @@ def show():
     return jsonify(result)
 
 @bp_role.route('/tipopessoa/mostrar/<id>', methods=['GET'])
-def show_by_id():
+def show_by_id(id):
     tps = TipoPessoaSchema()
     tp = TipoPessoaTable.query.get(id)
     result = tps.dump(tp)
@@ -33,7 +33,7 @@ def create():
 
     return jsonify('Certin certin, meu bom')
 
-@bp_role.route('/tipopessoa/<id>', methods=['PUT'])
+@bp_role.route('/tipopessoa/alterar/<id>', methods=['PUT'])
 def update(id):
     tp = TipoPessoaTable.query.get(id)
 
@@ -43,11 +43,14 @@ def update(id):
 
     db.session.add(tp)
     db.session.commit()
+    
+    return jsonify("certin, certin")
 
 @bp_role.route('/tipopessoa/delete/<id>', methods=['DELETE'])
 def delete(id):
     role = TipoPessoaTable.query.get(id)
 
     db.session.delete(role)
+    db.session.commit()
 
     return jsonify('certin certin')
