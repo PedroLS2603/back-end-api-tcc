@@ -8,7 +8,7 @@ class SysAccessTable(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     login = db.Column(db.String(20), unique=True, nullable=False)
-    senha = db.Column(db.String(20), unique=True, nullable=False)
+    senha = db.Column(db.String(20), nullable=False)
 
 class TipoPessoaTable(db.Model):
     __tablename__ = 'tipopessoa'
@@ -27,7 +27,7 @@ class PessoaTable(db.Model):
     __tablename__ = 'pessoa'
 
     id = db.Column(db.Integer, primary_key=True)
-    nome = db.Column(db.String(45), unique=True, nullable=False)
+    nome = db.Column(db.String(45), nullable=False)
     cpf = db.Column(db.String(14), unique=True, nullable=False)
     rg = db.Column(db.String(12), unique=True, nullable=False)
     foto = db.Column(db.String(80), unique=True, nullable=False)
@@ -63,7 +63,7 @@ class PredioTable(db.Model):
     __tablename__ = 'predio'
 
     id = db.Column(db.Integer, primary_key=True)
-    evento = db.Column(db.Boolean, unique=True, nullable=False)
+    evento = db.Column(db.Boolean, nullable=False)
 
     #Configuração dos relacionamentos
     apartamento_idpredio = db.relationship('ApartamentoTable', backref='apartamento_idpredio')

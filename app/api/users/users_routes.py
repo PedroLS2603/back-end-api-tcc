@@ -19,8 +19,9 @@ def show():
 def show_by_id(id):
     ps = PessoaSchema()
     user = PessoaTable.query.get(id)
+    result = ps.dump(user)
     
-    return ps.jsonify(user)
+    return jsonify(result)
 
 @bp_users.route('/user/criar', methods=['POST'])
 def create():
@@ -56,7 +57,7 @@ def update(id):
     if tp in tipopessoa:
         tp = tipopessoa['descricao']
 
-
+        
 
     user.nome = nome
     user.cpf = cpf
