@@ -1,7 +1,6 @@
 from flask import Blueprint, jsonify, request
 from __init__ import db
 from flask_sqlalchemy import SQLAlchemy
-from serializer import ApartamentoSchema, PredioSchema
 from models import ApartamentoTable, PredioTable
 
 bp_apartamento = Blueprint('apartamento', __name__)
