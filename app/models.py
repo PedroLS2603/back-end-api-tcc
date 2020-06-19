@@ -79,7 +79,7 @@ class ApartamentoTable(db.Model):
     __tablename__ = 'apartamento'   
 
     id = db.Column(db.Integer, primary_key=True)
-    apartamento_idprd = db.Column(db.Integer, db.ForeignKey('predio.id'), unique=True, nullable=False)
+    apartamento_idprd = db.Column(db.Integer, db.ForeignKey('predio.id'), nullable=False)
 
     #Configuração dos relacionamentos
     morador_idapartamento = db.relationship('MoradorTable', backref='morador_idapartamento')
@@ -110,27 +110,27 @@ class EntradaTable(db.Model):
     __tablename__ = 'entrada'
 
     id = db.Column(db.Integer, primary_key=True)
-    entrada_idapt = db.Column(db.Integer, db.ForeignKey('apartamento.id'), unique=True, nullable=False)
-    entrada_idprd = db.Column(db.Integer, db.ForeignKey('predio.id'), unique=True, nullable=False)
-    entrada_idpes = db.Column(db.Integer, db.ForeignKey('pessoa.id'), unique=True, nullable=False)
-    datahora = db.Column(db.DateTime, unique=True, nullable=False)
+    entrada_idapt = db.Column(db.Integer, db.ForeignKey('apartamento.id'), nullable=False)
+    entrada_idprd = db.Column(db.Integer, db.ForeignKey('predio.id'), nullable=False)
+    entrada_idpes = db.Column(db.Integer, db.ForeignKey('pessoa.id'), nullable=False)
+    datahora = db.Column(db.DateTime, nullable=False)
 
     #Configuração dos relacionamentos
     saida_identrada = db.relationship('SaidaTable', backref='saida_identrada')
 
-    def __init__(self, entrada_idapartamento, entrada_idpredio, entrada_idpessoa, datahora):
-        self.entrada_idapartamento = entrada_idapartamento
-        self.entrada_idpredio = entrada_idpredio
-        self.entrada_idpessoa = entrada_idpessoa
-        self.datahora=datahora
+    def __init__(self, entrada_idapt, entrada_idprd, entrada_idpes, datahora):
+        self.entrada_idapt = entrada_idapt
+        self.entrada_idprd = entrada_idprd
+        self.entrada_idpes = entrada_idpes
+        self.datahora = datahora
 
 class SaidaTable(db.Model):
     __tablename__ = 'saida'
 
     id = db.Column(db.Integer, primary_key=True)
-    saida_idpes = db.Column(db.Integer, db.ForeignKey('pessoa.id'), unique=True, nullable=False)
-    saida_ident = db.Column(db.Integer, db.ForeignKey('entrada.id'), unique=True)
-    datahora = db.Column(db.DateTime, unique=True, nullable=False)
+    saida_idpes = db.Column(db.Integer, db.ForeignKey('pessoa.id'), nullable=False)
+    saida_ident = db.Column(db.Integer, db.ForeignKey('entrada.id'))
+    datahora = db.Column(db.DateTime, nullable=False)
 
     def __init__(self, saida_idpessoa, saida_identrada, datahora):
         self.saida_idpessoa = saida_idpessoa

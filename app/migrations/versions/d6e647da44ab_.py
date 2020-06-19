@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 3812a2d64d41
+Revision ID: d6e647da44ab
 Revises: 
-Create Date: 2020-06-16 16:02:48.742801
+Create Date: 2020-06-19 13:44:27.101947
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '3812a2d64d41'
+revision = 'd6e647da44ab'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -21,16 +21,14 @@ def upgrade():
     op.create_table('predio',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('evento', sa.Boolean(), nullable=False),
-    sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('evento')
+    sa.PrimaryKeyConstraint('id')
     )
     op.create_table('sysaccess',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('login', sa.String(length=20), nullable=False),
     sa.Column('senha', sa.String(length=20), nullable=False),
     sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('login'),
-    sa.UniqueConstraint('senha')
+    sa.UniqueConstraint('login')
     )
     op.create_table('tipopessoa',
     sa.Column('id', sa.Integer(), nullable=False),
@@ -42,8 +40,7 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('apartamento_idprd', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['apartamento_idprd'], ['predio.id'], ),
-    sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('apartamento_idprd')
+    sa.PrimaryKeyConstraint('id')
     )
     op.create_table('pessoa',
     sa.Column('id', sa.Integer(), nullable=False),
@@ -56,7 +53,6 @@ def upgrade():
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('cpf'),
     sa.UniqueConstraint('foto'),
-    sa.UniqueConstraint('nome'),
     sa.UniqueConstraint('rg')
     )
     op.create_table('encomenda',
@@ -75,11 +71,7 @@ def upgrade():
     sa.ForeignKeyConstraint(['entrada_idapt'], ['apartamento.id'], ),
     sa.ForeignKeyConstraint(['entrada_idpes'], ['pessoa.id'], ),
     sa.ForeignKeyConstraint(['entrada_idprd'], ['predio.id'], ),
-    sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('datahora'),
-    sa.UniqueConstraint('entrada_idapt'),
-    sa.UniqueConstraint('entrada_idpes'),
-    sa.UniqueConstraint('entrada_idprd')
+    sa.PrimaryKeyConstraint('id')
     )
     op.create_table('funcionario',
     sa.Column('id', sa.Integer(), nullable=False),
@@ -132,10 +124,7 @@ def upgrade():
     sa.Column('datahora', sa.DateTime(), nullable=False),
     sa.ForeignKeyConstraint(['saida_ident'], ['entrada.id'], ),
     sa.ForeignKeyConstraint(['saida_idpes'], ['pessoa.id'], ),
-    sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('datahora'),
-    sa.UniqueConstraint('saida_ident'),
-    sa.UniqueConstraint('saida_idpes')
+    sa.PrimaryKeyConstraint('id')
     )
     op.create_table('listaconvidados',
     sa.Column('id', sa.Integer(), nullable=False),
