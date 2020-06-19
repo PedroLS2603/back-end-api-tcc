@@ -132,9 +132,9 @@ class SaidaTable(db.Model):
     saida_ident = db.Column(db.Integer, db.ForeignKey('entrada.id'))
     datahora = db.Column(db.DateTime, nullable=False)
 
-    def __init__(self, saida_idpessoa, saida_identrada, datahora):
-        self.saida_idpessoa = saida_idpessoa
-        self.saida_identrada = saida_identrada        
+    def __init__(self, saida_idpes, saida_ident, datahora):
+        self.saida_idpes = saida_idpes
+        self.saida_ident = saida_ident        
         self.datahora = datahora
 
 class EncomendaTable(db.Model):
