@@ -100,10 +100,10 @@ class MoradorTable(db.Model):
     #Configuração dos relacionamentos
     evento_idmrd = db.relationship('EventoTable', backref='evento_idmorador')
 
-    def __init__(self, morador_idapartamento, morador_idpredio, morador_idpessoa):
-        self.morador_idapartamento = morador_idapartamento
-        self.morador_idpredio = morador_idpredio
-        self.morador_idpessoa = morador_idpessoa
+    def __init__(self, morador_idapt, morador_idprd, morador_idpes):
+        self.morador_idapt = morador_idapt
+        self.morador_idprd = morador_idprd
+        self.morador_idpes = morador_idpes
 
 
 class EntradaTable(db.Model):

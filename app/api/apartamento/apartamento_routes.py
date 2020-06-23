@@ -3,6 +3,7 @@ from __init__ import db
 from flask_sqlalchemy import SQLAlchemy
 from models import ApartamentoTable, PredioTable
 
+
 bp_apartamento = Blueprint('apartamento', __name__)
 
 @bp_apartamento.route('/apartamento/criar', methods=['POST'])
@@ -44,9 +45,8 @@ def show_all():
     cont = 0 
 
     for i in apts:
-        apartamentos.append({"apartamento":apts[cont].id, "predio": apts[cont].apartamento_idprd})
-        cont = cont+1
-
+        apartamentos.append({"predio": apts[cont].apartamento_idprd, "apartamento": apts[cont].id})
+    
 
     return jsonify(apartamentos)
 
