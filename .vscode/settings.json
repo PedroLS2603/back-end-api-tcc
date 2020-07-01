@@ -1,7 +1,11 @@
 {
-    "python.linting.pylintEnabled": true,
+    "python.linting.pylintEnabled": false,
     "python.linting.enabled": false,
-    "python.pythonPath": "C:\\Users\\Pedro Lima\\.virtualenvs\\api_tcc-pqko25V7\\Scripts\\python.exe",
-    "python.linting.pylintArgs": ["--load-plugins", "pylint_flask_sqlalchemy"]
+    "python.pythonPath": "C:\\Users\\Pedro Lima\\.virtualenvs\\back-end-api-tcc-iKiP0bHZ\\Scripts\\python.exe",
+    "python.linting.pylintArgs": [
+        "--load-plugins",
+        "pylint_flask_sqlalchemy"
+    ],
+    "python.linting.mypyEnabled": true
     
 }

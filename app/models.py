@@ -10,6 +10,10 @@ class SysAccessTable(db.Model):
     login = db.Column(db.String(20), unique=True, nullable=False)
     senha = db.Column(db.String(20), nullable=False)
 
+    def __init__(self, login, senha):
+        self.login = login
+        self.senha = senha
+
 class TipoPessoaTable(db.Model):
     __tablename__ = 'tipopessoa'
 
@@ -53,6 +57,7 @@ class FuncionarioTable(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     func_idpessoa = db.Column(db.Integer, db.ForeignKey('pessoa.id'), unique=True, nullable=False)
+    funcao = db.Column(db.String(20), nullable=False)
 
     def __init__(self, login, senha, funcionario_idpessoa):
         self.login = login
@@ -170,21 +175,21 @@ class ListaConvidadosTable(db.Model):
     rg = db.Column(db.String(12), unique=True, nullable=False)
     listaconvidados_idevt = db.Column(db.Integer, db.ForeignKey('evento.id'), unique=True, nullable=False)
 
-    def __init(self, nome, rg, listaconvidados_idevento):
+    def __init__(self, nome, rg, listaconvidados_idevt):
         self.nome = nome 
         self.rg = rg
-        self.listaconvidados_idevento = listaconvidados_idevento
+        self.listaconvidados_idevento = listaconvidados_idevt
 
 class ProblemaTable(db.Model):
     __tablename__ = 'problema'
 
     id = db.Column(db.Integer, primary_key=True)
     descricao = db.Column(db.String(200), unique=True, nullable=False)
-    problema_idprd = db.Column(db.Integer, db.ForeignKey('predio.id'), unique=True, nullable=False)
-    problema_idapt = db.Column(db.Integer, db.ForeignKey('apartamento.id'), unique=True, nullable=False)
+    problema_idprd = db.Column(db.Integer, db.ForeignKey('predio.id'), nullable=False)
+    problema_idapt = db.Column(db.Integer, db.ForeignKey('apartamento.id'), nullable=False)
 
-    def __init__(self, descricao, problema_idpredio, problema_idapartamento):
+    def __init__(self, descricao, problema_idprd, problema_idapt):
         self.descricao = descricao
-        self.problema_idpredio = problema_idpredio
-        self.problema_idapartamento = problema_idapartamento
+        self.problema_idprd = problema_idprd
+        self.problema_idapt = problema_idapt
 

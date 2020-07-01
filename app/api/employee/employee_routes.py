@@ -1,11 +1,12 @@
 from flask import Blueprint, jsonify, current_app
 from flask_sqlalchemy import SQLAlchemy
 from serializer import FuncionarioSchema
-from employee import authenticate_login, create_account
+from models import PessoaTable, FuncionarioTable
+
 
 bp_employee = Blueprint('employee', __name__)
 
-@bp_employee.route('/funcionario/mostrar', methods=['GET'])
+@bp_employee.route('/funcionario/criar', methods=['GET'])
 def show():
     fs = FuncionarioSchema(many=True)
     all_func = funcionario.query.all()
@@ -18,7 +19,7 @@ def show_by_id(id):
     
     fs = FuncionarioSchema()
     func = funcionario.query.filter(id=id)
-    result = rs.dump(func)
+    result = fs.dump(func)
 
     return jsonify(result)
 
