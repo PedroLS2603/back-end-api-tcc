@@ -1,34 +1,80 @@
-from flask import Blueprint, jsonify, current_app
+from flask import Flask, request, jsonify, Blueprint
 from flask_sqlalchemy import SQLAlchemy
 from serializer import FuncionarioSchema
 from models import PessoaTable, FuncionarioTable
+from __init__ import db
 
 
 bp_employee = Blueprint('employee', __name__)
 
-@bp_employee.route('/funcionario/criar', methods=['GET'])
-def show():
-    fs = FuncionarioSchema(many=True)
-    all_func = funcionario.query.all()
-    result = fs.dump(all_func)
+@bp_employee.route('/funcionario/criar', methods=['POST'])
+def create():
+    cpf = request.json['cpf']
+    funcao = request.json['funcao']
+    
+    pes = PessoaTable.query.filter_by(cpf=cpf).first()
 
-    return jsonify(result)
+    pes = pes.id
+
+    new_func = FuncionarioTable(pes, funcao)
+
+    db.session.add(new_func)
+    db.session.commit()
+
+    return jsonify('Tudo certo')
+
+@bp_employee.route('/funcionario/mostrar', methods=['GET'])
+def show_all():
+    
+    all_func = FuncionarioTable.query.all()
+    
+    cont = 0 
+    output = []
+
+
+    for f in all_func:
+        pes = PessoaTable.query.get(all_func[cont].id)
+        pes = pes.nome
+        output.append({"Nome": pes, "Função": all_func[cont].funcao})
+        cont = cont+1
+
+    return jsonify(output)
 
 @bp_employee.route('/funcionario/mostrar/<id>', methods=['GET'])
 def show_by_id(id):
     
-    fs = FuncionarioSchema()
-    func = funcionario.query.filter(id=id)
-    result = fs.dump(func)
 
-    return jsonify(result)
+    func = FuncionarioTable.query.get(id)
+    pes = PessoaTable.query.get(func.func_idpessoa)
 
-@bp_employee.route('/funcionario/login', methods=['GET', 'POST'])
-def login():
-    pass
+    output = {"Nome": pes.nome, "Função": func.funcao}
 
-@bp_employee.route('/funcionario/', methods=['GET', 'POST'])
-def create():
-    pass
+    return jsonify(output)
 
+@bp_employee.route('/funcionario/alterar/<id>', methods=['PUT'])
+def modify(id):
+    
+    func = FuncionarioTable.query.get(id)
 
+    cpf = request.json['cpf']
+
+    fc = PessoaTable.query.get(id)
+    
+    if func.func_idpessoa != '':
+        func.func_idpessoa = fc
+    if func.funcao != '':
+        func.funcao = funcao
+
+    db.session.commit()
+
+    return jsonify('Tudo certo')
+    
+@bp_employee.route('/funcionario/deletar/<id>', methods=['DELETE'])
+def delete(id):
+    
+    func = FuncionarioTable.query.get(id)
+
+    db.session.delete(func)
+    db.session.commit()
+
+    return jsonify('Tudo certo')

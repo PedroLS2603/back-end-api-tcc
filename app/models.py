@@ -59,10 +59,9 @@ class FuncionarioTable(db.Model):
     func_idpessoa = db.Column(db.Integer, db.ForeignKey('pessoa.id'), unique=True, nullable=False)
     funcao = db.Column(db.String(20), nullable=False)
 
-    def __init__(self, login, senha, funcionario_idpessoa):
-        self.login = login
-        self.senha = senha
-        self.funcionario_idpessoa = funcionario_idpessoa
+    def __init__(self, func_idpessoa, funcao):
+        self.func_idpessoa = func_idpessoa
+        self.funcao = funcao
 
 class PredioTable(db.Model):
     __tablename__ = 'predio'

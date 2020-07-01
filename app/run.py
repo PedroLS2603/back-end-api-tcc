@@ -6,6 +6,7 @@ from api.apartamento.apartamento_routes import bp_apartamento
 from api.access.access_routes import bp_acesso
 from api.dweller.dweller_routes import bp_morador
 from api.problem.problem_routes import bp_problema
+from api.employee.employee_routes import bp_employee
 
 app.register_blueprint(bp_role)
 app.register_blueprint(bp_users)
@@ -14,6 +15,7 @@ app.register_blueprint(bp_apartamento)
 app.register_blueprint(bp_acesso)
 app.register_blueprint(bp_morador)
 app.register_blueprint(bp_problema)
+app.register_blueprint(bp_employee)
 
 
 
