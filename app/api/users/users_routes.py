@@ -8,20 +8,28 @@ bp_users = Blueprint('pessoa', __name__)
 
 @bp_users.route('/user/mostrar', methods=['GET'])
 def show():
-    ps = PessoaSchema(many=True)
+
     users = PessoaTable.query.all()
-    result = ps.dump(users)
+    output=[]
+    cont=0
 
+    for u in users:
+        tipopessoa = TipoPessoaTable.query.get(users[cont].tp)
+        tipopessoa = tipopessoa.descricao
+        output.append({"ID": users[cont].id,"Nome":users[cont].nome, "CPF": users[cont].cpf, "RG": users[cont].rg, "Tipo": tipopessoa})
+        cont = cont+1
 
-    return jsonify(result)
+    return jsonify(output)
 
 @bp_users.route('/user/mostrar/<id>', methods=['GET'])
 def show_by_id(id):
-    ps = PessoaSchema()
     user = PessoaTable.query.get(id)
-    result = ps.dump(user)
+    tipopessoa = TipoPessoaTable.query.get(user.tp)
+
+    output = {"ID":user.id,"Nome": user.nome, "CPF": user.cpf, "RG": user.rg, "Tipo": tipopessoa.descricao}
     
-    return jsonify(result)
+    
+    return jsonify(output)
 
 @bp_users.route('/user/criar', methods=['POST'])
 def create():
@@ -58,12 +66,16 @@ def update(id):
         tp = tipopessoa['descricao']
 
         
-
-    user.nome = nome
-    user.cpf = cpf
-    user.rg = rg
-    user.ft = ft
-    user.tp = tp
+    if nome != "":
+        user.nome = nome
+    if cpf != "":
+        user.cpf = cpf
+    if rg != "":
+        user.rg = rg
+    if ft != "":
+        user.ft = ft
+    if tp != "":
+        user.tp = tp
 
     db.session.commit()
 

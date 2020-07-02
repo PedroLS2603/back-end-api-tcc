@@ -46,7 +46,7 @@ def show_all():
 
     for i in apts:
         apartamentos.append({"predio": apts[cont].apartamento_idprd, "apartamento": apts[cont].id})
-    
+        cont = cont+1
 
     return jsonify(apartamentos)
 

@@ -145,10 +145,12 @@ class EncomendaTable(db.Model):
     __tablename__ = 'encomenda'
 
     id = db.Column(db.Integer, primary_key=True)
-    encomenda_idpes = db.Column(db.Integer, db.ForeignKey('pessoa.id'), unique=True, nullable=False)
+    encomenda_idpes = db.Column(db.Integer, db.ForeignKey('pessoa.id'), nullable=False)
+    datahora = db.Column(db.DateTime, nullable=False)
 
-    def __init__(self, encomenda_idpessoa):
-        self.encomenda_idpessoa = encomenda_idpessoa
+    def __init__(self, encomenda_idpes, datahora):
+        self.encomenda_idpes = encomenda_idpes
+        self.datahora = datahora
 
 class EventoTable(db.Model):
     __tablename__ = 'evento'
