@@ -33,12 +33,12 @@ def show_all():
 
 
     for f in all_func:
-        pes = PessoaTable.query.get(all_func[cont].id)
+        pes = PessoaTable.query.get(all_func[cont].func_idpessoa)
         pes = pes.nome
         output.append({"Nome": pes, "Função": all_func[cont].funcao})
         cont = cont+1
 
-    return jsonify(output)
+    return jsonify({"Funcionários":output})
 
 @bp_employee.route('/funcionario/mostrar/<id>', methods=['GET'])
 def show_by_id(id):
@@ -56,13 +56,14 @@ def modify(id):
     
     func = FuncionarioTable.query.get(id)
 
+    funcao = request.json['funcao']
     cpf = request.json['cpf']
 
-    fc = PessoaTable.query.get(id)
     
-    if func.func_idpessoa != '':
-        func.func_idpessoa = fc
-    if func.funcao != '':
+    if cpf != "":
+        fc = PessoaTable.query.filter_by(cpf=cpf).first()
+        func.func_idpessoa = fc.id
+    if funcao != '':
         func.funcao = funcao
 
     db.session.commit()
