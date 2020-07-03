@@ -156,17 +156,19 @@ class EventoTable(db.Model):
     __tablename__ = 'evento'
 
     id = db.Column(db.Integer, primary_key=True)
-    datahora = db.Column(db.DateTime, unique=True, nullable=False)
-    evento_idmrd = db.Column(db.Integer, db.ForeignKey('morador.id'), unique=True, nullable=False)
-    evento_idprd = db.Column(db.Integer, db.ForeignKey('predio.id'), unique=True, nullable=False)
+    inicio = db.Column(db.DateTime, unique=True, nullable=False)
+    final = db.Column(db.DateTime, unique=True, nullable=False)
+    evento_idmrd = db.Column(db.Integer, db.ForeignKey('morador.id'), nullable=False)
+    evento_idprd = db.Column(db.Integer, db.ForeignKey('predio.id'), nullable=False)
 
     #Configuração dos relacionamentos
     listaconvidados_idevento = db.relationship('ListaConvidadosTable', backref='listaconvidados_idevento')
 
-    def __init__(self, datahora, evento_idmorador, evento_idpredio):
-        self.datahora = datahora
-        self.evento_idmorador = evento_idmorador
-        self.evento_idpredio = evento_idpredio
+    def __init__(self, inicio, final, evento_idmrd, evento_idprd):
+        self.inicio = inicio
+        self.final = final
+        self.evento_idmrd = evento_idmrd
+        self.evento_idprd = evento_idprd
 
 class ListaConvidadosTable(db.Model):
     __tablename__ = 'listaconvidados'
