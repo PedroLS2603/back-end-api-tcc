@@ -60,11 +60,6 @@ def update(id):
     rg = request.json['rg']
     ft = request.json['foto']
     tp = request.json['tipopessoa']
-
-    tipopessoa = TipoPessoaTable.query.all()
-    if tp in tipopessoa:
-        tp = tipopessoa['descricao']
-
         
     if nome != "":
         user.nome = nome
@@ -75,6 +70,10 @@ def update(id):
     if ft != "":
         user.ft = ft
     if tp != "":
+        tipopessoa = TipoPessoaTable.query.all()
+        if tp in tipopessoa:
+            tp = tipopessoa.id
+
         user.tp = tp
 
     db.session.commit()

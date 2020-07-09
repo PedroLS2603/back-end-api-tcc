@@ -174,14 +174,14 @@ class ListaConvidadosTable(db.Model):
     __tablename__ = 'listaconvidados'
 
     id = db.Column(db.Integer, primary_key=True)
-    nome = db.Column(db.String(45), unique=True, nullable=False)
+    nome = db.Column(db.String(45), nullable=False)
     rg = db.Column(db.String(12), unique=True, nullable=False)
     listaconvidados_idevt = db.Column(db.Integer, db.ForeignKey('evento.id'), unique=True, nullable=False)
 
     def __init__(self, nome, rg, listaconvidados_idevt):
         self.nome = nome 
         self.rg = rg
-        self.listaconvidados_idevento = listaconvidados_idevt
+        self.listaconvidados_idevt = listaconvidados_idevt
 
 class ProblemaTable(db.Model):
     __tablename__ = 'problema'
