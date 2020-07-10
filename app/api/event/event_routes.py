@@ -33,10 +33,10 @@ def create():
         db.session.add(new_evento)
         db.session.commit() 
         
-        return jsonify('Evento criado com sucesso!')
+        return jsonify({"message":'Evento criado com sucesso!'})
     
     except:
-        return jsonify('Erro ao criar evento. Verifique as informações inseridas e se a data e horário estão disponíveis.')
+        return jsonify({"message":'Erro ao criar evento. Verifique as informações inseridas e se a data e horário estão disponíveis.'})
 
 @bp_evento.route('/evento/mostrar', methods=['GET'])
 def show_all():
@@ -52,13 +52,13 @@ def show_all():
             pes = pes.nome
 
 
-            output.append({"ID":eventos[cont].id, "Organizador": pes, "Data": eventos[cont].inicio.strftime('%d/%m/%Y'), "Horário de início": eventos[cont].inicio.strftime('%H:%M'), "Horário de encerramento": eventos[cont].final.strftime('%H:%M'), "Local": "Prédio "+str(eventos[cont].evento_idprd) })
+            output.append({"id":eventos[cont].id, "organizador": pes, "data": eventos[cont].inicio.strftime('%d/%m/%Y'), "inicio": eventos[cont].inicio.strftime('%H:%M'), "final": eventos[cont].final.strftime('%H:%M'), "predio": eventos[cont].evento_idprd })
             cont = cont+1
 
         return jsonify(output)
 
     except:
-        return jsonify('Sem registros.')
+        return jsonify({"message":'Sem registros.'})
 
 @bp_evento.route('/evento/mostrar/<id>', methods=['GET'])
 def show_by_id(id):
@@ -75,7 +75,7 @@ def show_by_id(id):
         return jsonify(output)
     
     except:
-        return jsonify('Sem registros.')
+        return jsonify({"message":'Sem registros.'})
 
 @bp_evento.route('/evento/alterar/<id>', methods=['PUT'])
 def modify(id):
@@ -111,10 +111,10 @@ def modify(id):
 
         db.session.commit()
         
-        return jsonify('Informações do evento alteradas com sucesso!')
+        return jsonify({"message":'Informações do evento alteradas com sucesso!'})
     
     except:
-        return jsonify('Não foi possível alterar as informações do evento. Verifique as informações inseridas.')
+        return jsonify({"message":'Não foi possível alterar as informações do evento. Verifique as informações inseridas.'})
 
 @bp_evento.route('/evento/deletar/<id>', methods=['DELETE'])
 def delete(id):
@@ -125,7 +125,7 @@ def delete(id):
         db.session.delete(evento)
         db.session.commit()
 
-        return jsonify('Evento deletado com sucesso!')
+        return jsonify({"message":'Evento deletado com sucesso!'})
     
     except:
-        return jsonify('Erro ao deletar evento.')
+        return jsonify({"message":'Erro ao deletar evento.'})

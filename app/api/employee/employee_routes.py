@@ -20,10 +20,10 @@ def create():
         db.session.add(new_func)
         db.session.commit()
 
-        return jsonify('Funcionário criado com sucesso!')
+        return jsonify({"message":'Funcionário criado com sucesso!'})
     
     except:
-        return jsonify('Não foi possível criar funcionário.')
+        return jsonify({"message":'Não foi possível criar funcionário.'})
 
 @bp_employee.route('/funcionario/mostrar', methods=['GET'])
 def show_all():
@@ -42,7 +42,7 @@ def show_all():
         return jsonify(output)
 
     except:
-        return jsonify('Sem registros.')
+        return jsonify({"message":'Sem registros.'})
 
 @bp_employee.route('/funcionario/mostrar/<id>', methods=['GET'])
 def show_by_id(id):
@@ -57,7 +57,7 @@ def show_by_id(id):
         return jsonify(output)
 
     except:
-        return jsonify('Sem registro.')
+        return jsonify({"message":'Sem registro.'})
 
 @bp_employee.route('/funcionario/alterar/<id>', methods=['PUT'])
 def modify(id):
@@ -75,10 +75,10 @@ def modify(id):
             func.funcao = funcao
         db.session.commit()
 
-        return jsonify('Informações do funcionário alterada com sucesso!')
+        return jsonify({"message":'Informações do funcionário alterada com sucesso!'})
 
     except:
-        return jsonify('Não foi possível alterar as informações do funcionário')
+        return jsonify({"message":'Não foi possível alterar as informações do funcionário'})
 
 @bp_employee.route('/funcionario/deletar/<id>', methods=['DELETE'])
 def delete(id):
@@ -89,7 +89,7 @@ def delete(id):
         db.session.delete(func)
         db.session.commit()
 
-        return jsonify('Funcionário deletado com sucesos!')
+        return jsonify({"message":'Funcionário deletado com sucesos!'})
     
     except:
-        return jsonify('Erro ao deletar funcionário.')
+        return jsonify({"message":'Erro ao deletar funcionário.'})

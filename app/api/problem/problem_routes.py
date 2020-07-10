@@ -22,10 +22,10 @@ def create():
         db.session.add(new_prob)
         db.session.commit()
 
-        return jsonify('Problema registrado com sucesso!')
+        return jsonify({"message":'Problema registrado com sucesso!'})
 
     except:
-        return jsonify('Erro ao registrar problema. Verifique as informações inseridas')
+        return jsonify({"message":'Erro ao registrar problema. Verifique as informações inseridas'})
 
 @bp_problema.route('/problema/mostrar', methods=['GET'])
 def show_all():
@@ -43,7 +43,7 @@ def show_all():
         return jsonify(output)
 
     except:
-        return jsonify('Sem registros.')
+        return jsonify({"message":'Sem registros.'})
 
 @bp_problema.route('/problema/mostrar/<id>', methods=['GET'])
 def show_by_id(id):
@@ -55,7 +55,7 @@ def show_by_id(id):
         return jsonify(output)
 
     except:
-        return jsonify('Sem registro.')
+        return jsonify({"message":'Sem registro.'})
 
 @bp_problema.route('/problema/alterar/<id>', methods=['PUT'])
 def modify(id):
@@ -75,10 +75,10 @@ def modify(id):
 
         db.session.commit()
 
-        return jsonify('Informações sobre o problema alteradas com sucesso!')
+        return jsonify({"message":'Informações sobre o problema alteradas com sucesso!'})
 
     except:
-        return jsonify('Erro ao alterar informações sobre o problema. Verifique as informações inseridas.')
+        return jsonify({"message":'Erro ao alterar informações sobre o problema. Verifique as informações inseridas.'})
 
 @bp_problema.route('/problema/deletar/<id>', methods=['DELETE'])
 def delete(id):
@@ -88,7 +88,7 @@ def delete(id):
         db.session.delete(problema)
         db.session.commit()
 
-        return jsonify('Problema deletado com sucesso!')
+        return jsonify({"message":'Problema deletado com sucesso!'})
     
     except:
-        return jsonify('Erro ao deletar problema.')
+        return jsonify({"message":'Erro ao deletar problema.'})

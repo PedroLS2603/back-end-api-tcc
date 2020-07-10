@@ -23,10 +23,10 @@ def create():
         db.session.add(new_lista)
         db.session.commit()
 
-        return jsonify('Convidado inserido com sucesso!')
+        return jsonify({"message":'Convidado inserido com sucesso!'})
 
     except:
-        return jsonify('Não foi possível inserir o convidado, favor verificar as informações inseridas.')
+        return jsonify({"message":'Não foi possível inserir o convidado, favor verificar as informações inseridas.'})
 
 @bp_convidado.route('/convidado/<idevt>/mostrar/', methods=['GET'])
 def show_lista_by_cpf_organizador(idevt):
@@ -42,13 +42,13 @@ def show_lista_by_cpf_organizador(idevt):
         cont = 0
 
         for c in convidados:
-            output.append({"ID": convidados[cont].id,"Nome":convidados[cont].nome, "RG": convidados[cont].rg, "Evento": idevt, "Organizador": organizador.nome})
+            output.append({"id": convidados[cont].id,"nome":convidados[cont].nome, "rg": convidados[cont].rg, "evento": idevt, "organizador": organizador.nome})
             cont = cont+1
 
         return jsonify(output)
 
     except:
-        return jsonify('Sem registros. Favor verificar as informações inseridas')
+        return jsonify({"message":'Sem registros. Favor verificar as informações inseridas'})
 
 @bp_convidado.route('/convidado/<idevt>/mostrar/<rg>', methods=['GET'])
 def show_convidado_by_id(idevt, rg):
@@ -58,11 +58,11 @@ def show_convidado_by_id(idevt, rg):
         organizador = MoradorTable.query.get(evento.evento_idmrd)
         organizador = PessoaTable.query.filter_by(id=organizador.morador_idpes).first()
 
-        output = {"ID": convidado.id, "Nome":convidado.nome,"RG":convidado.rg, "Evento": convidado.listaconvidados_idevt, "Organizador": organizador.nome}
+        output = {"id": convidado.id, "nome":convidado.nome,"rg":convidado.rg, "evento": convidado.listaconvidados_idevt, "organizador": organizador.nome}
         return jsonify(output)
         
     except:
-        return jsonify('Sem registros. Favor verificar as informações inseridas')
+        return jsonify({"message":'Sem registros. Favor verificar as informações inseridas'})
 
 
 @bp_convidado.route('/convidado/<idevt>/alterar/<rg>', methods=['PUT'])
@@ -83,10 +83,10 @@ def modify(idevt, rg):
 
         db.session.commit()
 
-        return jsonify('Informações do convidado alteradas com sucesso!')
+        return jsonify({"message":'Informações do convidado alteradas com sucesso!'})
     
     except:
-        return jsonify('Não foi possível alterar as informações do convidado.')
+        return jsonify({"message":'Não foi possível alterar as informações do convidado.'})
 
 @bp_convidado.route('/convidado/<idevt>/deletar', methods=['DELETE'])
 def delete_lista(idevt):
@@ -105,10 +105,10 @@ def delete_lista(idevt):
 
         db.session.commit()
 
-        return jsonify('Lista de convidados do evento '+evento.id+' deletada com sucesso!')
+        return jsonify({"message":'Lista de convidados do evento '+evento.id+' deletada com sucesso!'})
 
     except:
-        return jsonify('Ocorreu um erro ao apagar a lista de convidados, favor verificar as informações inseridas.')
+        return jsonify({"message":'Ocorreu um erro ao apagar a lista de convidados, favor verificar as informações inseridas.'})
 
 @bp_convidado.route('/convidado/<idevt>/deletar/<rg>', methods=['DELETE'])
 def delete_convidado(idevt, rg):
@@ -118,8 +118,8 @@ def delete_convidado(idevt, rg):
         db.session.delete(convidado)
         db.session.commit()
 
-        return jsonify('Convidado deletado com sucesso!')
+        return jsonify({"message":'Convidado deletado com sucesso!'})
     
     except:
-        return jsonify('Não foi possível deletar o convidado, favor verificar as informações inseridas.')
+        return jsonify({"message":'Não foi possível deletar o convidado, favor verificar as informações inseridas.'})
             

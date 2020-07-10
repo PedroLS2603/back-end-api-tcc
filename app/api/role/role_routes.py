@@ -21,7 +21,7 @@ def show():
         return jsonify(output)
 
     except:
-        return jsonify('Sem registros.')
+        return jsonify({"message":'Sem registros.'})
 
 @bp_role.route('/tipopessoa/mostrar/<id>', methods=['GET'])
 def show_by_id(id):
@@ -32,7 +32,7 @@ def show_by_id(id):
         return jsonify(output)
 
     except:
-        return jsonify('Sem registro.')
+        return jsonify({"message":'Sem registro.'})
 
 @bp_role.route('/tipopessoa/criar', methods=['POST'])
 def create():
@@ -44,10 +44,10 @@ def create():
         db.session.add(new_role)
         db.session.commit()
 
-        return jsonify('Tipo criado com sucesso!')
+        return jsonify({"message":'Tipo criado com sucesso!'})
 
     except:
-        return jsonify('Erro ao criar tipo. Verifique as informações inseridas')
+        return jsonify({"message":'Erro ao criar tipo. Verifique as informações inseridas'})
 
 @bp_role.route('/tipopessoa/alterar/<id>', methods=['PUT'])
 def update(id):
@@ -62,10 +62,10 @@ def update(id):
         db.session.add(tp)
         db.session.commit()
         
-        return jsonify("Informações do tipo alteradas com sucesso!")
+        return jsonify({"message":"Informações do tipo alteradas com sucesso!"})
 
     except:
-        return jsonify('Não foi possível alterar as informações do tipo. Verifique as informações inseridas.')
+        return jsonify({"message":'Não foi possível alterar as informações do tipo. Verifique as informações inseridas.'})
 
 @bp_role.route('/tipopessoa/delete/<id>', methods=['DELETE'])
 def delete(id):
@@ -75,7 +75,7 @@ def delete(id):
         db.session.delete(role)
         db.session.commit()
 
-        return jsonify('Tipo deletado com sucesso!')
+        return jsonify({"message":'Tipo deletado com sucesso!'})
     
     except:
-        return jsonify('Erro ao deletar tipo.')
+        return jsonify({"message":'Erro ao deletar tipo.'})

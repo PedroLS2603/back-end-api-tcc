@@ -48,7 +48,7 @@ def show_all():
         return jsonify(output)
 
     except:
-        return jsonify('Sem registros.')
+        return jsonify({"message":'Sem registros.'})
 
 @bp_encomenda.route('/mail/mostrar/<id>', methods=['GET'])
 def show_by_id(id):
@@ -67,7 +67,7 @@ def show_by_id(id):
         return jsonify(output)
 
     except:
-        return jsonify('Sem registro.')
+        return jsonify({"message":'Sem registro.'})
 
 @bp_encomenda.route('/mail/alterar/<id>', methods=['PUT'])
 def modify(id):
@@ -85,10 +85,10 @@ def modify(id):
 
         db.session.commit()
 
-        return jsonify('Registro de encomenda alterado com sucesso!')
+        return jsonify({"message":'Registro de encomenda alterado com sucesso!'})
     
     except:
-        return jsonify('Erro ao alterar registro de encomenda, verifique as informações inseridas.')
+        return jsonify({"message":'Erro ao alterar registro de encomenda, verifique as informações inseridas.'})
 
 @bp_encomenda.route('/mail/deletar/<id>', methods=['DELETE'])
 def delete(id):
@@ -98,7 +98,7 @@ def delete(id):
         db.session.delete(encomenda)
         db.session.commit()
 
-        return jsonify('Registro de encomenda deletado com sucesso!')
+        return jsonify({"message":'Registro de encomenda deletado com sucesso!'})
     
     except:
-        return jsonify('Erro ao deletar registro de encomenda.')
+        return jsonify({"message":'Erro ao deletar registro de encomenda.'})

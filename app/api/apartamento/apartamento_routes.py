@@ -20,10 +20,10 @@ def create():
         db.session.add(new_apt)
         db.session.commit()
 
-        return jsonify('Apartamento registrado com sucesso!')
+        return jsonify({"message":'Apartamento registrado com sucesso!'})
     
     except:
-        return jsonify('Ocorreu um erro ao registrar o apartamento, verifique as informações inseridas.')
+        return jsonify({"message":'Ocorreu um erro ao registrar o apartamento, verifique as informações inseridas.'})
 
 @bp_apartamento.route('/apartamento/alterar/<id>', methods=['PUT'])
 def modify(id):
@@ -39,10 +39,10 @@ def modify(id):
 
         db.session.commit()
 
-        return jsonify('Informações do apartamento alterada com sucesso!')
+        return jsonify({"message":'Informações do apartamento alterada com sucesso!'})
 
     except:
-        return jsonify('Não foi possível alterar as informações do apartamento, verifique as informações inseridas.')
+        return jsonify({"message":'Não foi possível alterar as informações do apartamento, verifique as informações inseridas.'})
 
 @bp_apartamento.route('/apartamento/mostrar', methods=['GET'])
 def show_all():
@@ -60,7 +60,7 @@ def show_all():
         return jsonify(apartamentos)
 
     except:
-        return jsonify('Sem registros. Favor verificar as informações inseridas')
+        return jsonify({"message":'Sem registros. Favor verificar as informações inseridas'})
 
 @bp_apartamento.route('/apartamento/mostrar/<id>', methods=['GET'])
 def show_by_id(id):
@@ -77,7 +77,7 @@ def show_by_id(id):
         return jsonify(apt)
 
     except:
-        return jsonify('Sem registros. Favor verificar as informações inseridas')
+        return jsonify({"message":'Sem registros. Favor verificar as informações inseridas'})
 
 @bp_apartamento.route('/apartamento/deletar/<id>', methods=['DELETE'])
 def delete_by_id(id):
@@ -88,6 +88,6 @@ def delete_by_id(id):
         db.session.delete(apartamento)
         db.session.commit()
 
-        return jsonify('Apartamento deletado com sucesso!')
+        return jsonify({"message":'Apartamento deletado com sucesso!'})
     except:
-        return jsonify('Não foi possível deletar o apartamento.')
+        return jsonify({"message":'Não foi possível deletar o apartamento.'})

@@ -23,7 +23,7 @@ def show():
         return jsonify(output)
 
     except:
-        return jsonify('Sem registros.')
+        return jsonify({"message":'Sem registros.'})
 
 @bp_users.route('/user/mostrar/<id>', methods=['GET'])
 def show_by_id(id):
@@ -37,7 +37,7 @@ def show_by_id(id):
         
         return jsonify(output)
     except:
-        return jsonify('Sem registros.')
+        return jsonify({"message":'Sem registros.'})
 
 @bp_users.route('/user/criar', methods=['POST'])
 def create():
@@ -57,10 +57,10 @@ def create():
         db.session.add(new_user)
         db.session.commit()
 
-        return jsonify('Pessoa criada com sucesso!')
+        return jsonify({"message":'Pessoa criada com sucesso!'})
 
     except:
-        return jsonify('Erro ao criar pessoa. Verifique as informações inseridas')
+        return jsonify({"message":'Erro ao criar pessoa. Verifique as informações inseridas'})
 
 @bp_users.route('/user/alterar/<id>', methods=['PUT'])
 def update(id):
@@ -91,10 +91,10 @@ def update(id):
 
         db.session.commit()
 
-        return jsonify('Usuário alterado com sucesso!')
+        return jsonify({"message":'Usuário alterado com sucesso!'})
     
     except:
-        return jsonify('Erro ao alterar usuário. Verifique as informações inseridas.')
+        return jsonify({"message":'Erro ao alterar usuário. Verifique as informações inseridas.'})
 
 @bp_users.route('/user/deletar/<id>', methods=['DELETE'])
 def delete(id):
@@ -104,7 +104,7 @@ def delete(id):
         db.session.delete(user)
         db.session.commit()
 
-        return jsonify('Usuário deletado com sucesso!')
+        return jsonify({"message":'Usuário deletado com sucesso!'})
         
     except:
-        return jsonify('Erro ao deletar usuário.')    
+        return jsonify({"message":'Erro ao deletar usuário.'})    

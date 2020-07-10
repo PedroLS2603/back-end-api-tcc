@@ -18,10 +18,10 @@ def create():
         db.session.add(new_predio)
         db.session.commit()
 
-        return jsonify('Prédio criado com sucesso!')
+        return jsonify({"message":'Prédio criado com sucesso!'})
 
     except:
-        return jsonify('Erro ao criar prédio. Verifique as informações inseridas.')
+        return jsonify({"message":'Erro ao criar prédio. Verifique as informações inseridas.'})
 
 @bp_predio.route('/predio/alterar/<id>', methods=['PUT'])
 def modify(id):
@@ -35,10 +35,10 @@ def modify(id):
 
         db.session.commit()
 
-        return jsonify('Informações do prédio alterada com sucesso!')
+        return jsonify({"message":'Informações do prédio alterada com sucesso!'})
 
     except:
-        return jsonify('Erro ao alterar informações do prédio. Verifique as informações inseridas.')
+        return jsonify({"message":'Erro ao alterar informações do prédio. Verifique as informações inseridas.'})
 
 @bp_predio.route('/predio/mostrar', methods=['GET'])
 def show_all():
@@ -55,7 +55,7 @@ def show_all():
 
         return jsonify(output)
     except:
-        return jsonify('Sem registros.')
+        return jsonify({"message":'Sem registros.'})
 
 @bp_predio.route('/predio/mostrar/<id>', methods=['GET'])
 def show_by_id(id):
@@ -71,7 +71,7 @@ def show_by_id(id):
         return jsonify(output)
 
     except:
-        return jsonify('Sem registro.')
+        return jsonify({"message":'Sem registro.'})
 
 @bp_predio.route('/predio/deletar/<id>', methods=['DELETE'])
 def delete_by_id(id):
@@ -82,7 +82,7 @@ def delete_by_id(id):
         db.session.delete(predio)
         db.session.commit()
 
-        return jsonify('Prédio deletado com sucesso!')
+        return jsonify({"message":'Prédio deletado com sucesso!'})
 
     except:
-        return jsonify('Erro ao deletar prédio.')
+        return jsonify({"message":'Erro ao deletar prédio.'})

@@ -20,10 +20,10 @@ def create():
         db.session.add(new_morador)
         db.session.commit()
 
-        return jsonify('Morador registrado com sucesso!')
+        return jsonify({"message":'Morador registrado com sucesso!'})
     
     except:
-        return jsonify('Não foi possível registrar o morador, favor verificar os dados inseridos.')
+        return jsonify({"message":'Não foi possível registrar o morador, favor verificar os dados inseridos.'})
 
 @bp_morador.route('/morador/mostrar', methods=['GET'])
 def show_all():
@@ -46,7 +46,7 @@ def show_all():
         return jsonify(output)
     
     except:
-        return jsonify('Sem registros')
+        return jsonify({"message":'Sem registros'})
 
 @bp_morador.route('/morador/mostrar/<id>', methods=['GET'])
 def show_by_id(id):
@@ -62,7 +62,7 @@ def show_by_id(id):
         return jsonify(result)
 
     except:
-        return jsonify('Sem registros. Verifique as informações inseridas.')
+        return jsonify({"message":'Sem registros. Verifique as informações inseridas.'})
 
 @bp_morador.route('/morador/alterar/<id>', methods=['PUT'])
 def modify(id):
@@ -80,10 +80,10 @@ def modify(id):
 
         db.session.commit()
 
-        return jsonify('Informações do morador alteradas com sucesso!')
+        return jsonify({"message":'Informações do morador alteradas com sucesso!'})
 
     except:
-        return jsonify('Erro ao alterar as informações do morador. Verifique as informações inseridas. ')
+        return jsonify({"message":'Erro ao alterar as informações do morador. Verifique as informações inseridas.'})
 
 @bp_morador.route('/morador/deletar/<id>', methods=['DELETE'])
 def delete(id):
@@ -94,6 +94,6 @@ def delete(id):
         db.session.delete(morador)
         db.session.commit()
 
-        return jsonify('Morador deletado com sucesso!')
+        return jsonify({"message":'Morador deletado com sucesso!'})
     except:
-        return jsonify('Erro ao deletar morador.')
+        return jsonify({"message":'Erro ao deletar morador.'})
