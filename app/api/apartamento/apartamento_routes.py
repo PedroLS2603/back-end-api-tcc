@@ -11,30 +11,38 @@ def create():
     
     idpredio = request.json['predio']
 
-    predio = PredioTable.query.get(idpredio)
+    try:    
+        predio = PredioTable.query.get(idpredio)
 
 
-    new_apt = ApartamentoTable(predio)
+        new_apt = ApartamentoTable(predio)
 
-    db.session.add(new_apt)
-    db.session.commit()
+        db.session.add(new_apt)
+        db.session.commit()
 
-    return jsonify('Tudo certo')
+        return jsonify('Apartamento registrado com sucesso!')
+    
+    except:
+        return jsonify('Ocorreu um erro ao registrar o apartamento, verifique as informações inseridas.')
 
 @bp_apartamento.route('/apartamento/alterar/<id>', methods=['PUT'])
 def modify(id):
 
-    apt = ApartamentoTable.query.get(id)
-
     idpredio = request.json['predio']
 
-    predio = PredioTable.query.get(idpredio)
+    try:
+        apt = ApartamentoTable.query.get(id)
+        predio = PredioTable.query.get(idpredio)
 
-    apt.apartamento_idprd = predio.id
+        if idpredio !='':
+            apt.apartamento_idprd = predio.id
 
-    db.session.commit()
+        db.session.commit()
 
-    return jsonify('Tudo certo')
+        return jsonify('Informações do apartamento alterada com sucesso!')
+
+    except:
+        return jsonify('Não foi possível alterar as informações do apartamento, verifique as informações inseridas.')
 
 @bp_apartamento.route('/apartamento/mostrar', methods=['GET'])
 def show_all():
@@ -44,31 +52,42 @@ def show_all():
 
     cont = 0 
 
-    for i in apts:
-        apartamentos.append({"predio": apts[cont].apartamento_idprd, "apartamento": apts[cont].id})
-        cont = cont+1
+    try:
+        for i in apts:
+            apartamentos.append({"predio": apts[cont].apartamento_idprd, "apartamento": apts[cont].id})
+            cont = cont+1
 
-    return jsonify(apartamentos)
+        return jsonify(apartamentos)
+
+    except:
+        return jsonify('Sem registros. Favor verificar as informações inseridas')
 
 @bp_apartamento.route('/apartamento/mostrar/<id>', methods=['GET'])
 def show_by_id(id):
     
     apartamento = ApartamentoTable.query.get(id)
 
-    apt = {
-        "apartamento":apartamento.id,
-        "predio":apartamento.apartamento_idprd
-        }
+    try:
+        apt = {
+            "apartamento":apartamento.id,
+            "predio":apartamento.apartamento_idprd
+            }
 
 
-    return jsonify(apt)
+        return jsonify(apt)
+
+    except:
+        return jsonify('Sem registros. Favor verificar as informações inseridas')
 
 @bp_apartamento.route('/apartamento/deletar/<id>', methods=['DELETE'])
 def delete_by_id(id):
     
     apartamento = ApartamentoTable.query.get(id)
 
-    db.session.delete(apartamento)
-    db.session.commit()
+    try:
+        db.session.delete(apartamento)
+        db.session.commit()
 
-    return jsonify('Tudo certo')
+        return jsonify('Apartamento deletado com sucesso!')
+    except:
+        return jsonify('Não foi possível deletar o apartamento.')

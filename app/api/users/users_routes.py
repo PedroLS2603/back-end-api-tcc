@@ -13,23 +13,31 @@ def show():
     output=[]
     cont=0
 
-    for u in users:
-        tipopessoa = TipoPessoaTable.query.get(users[cont].tp)
-        tipopessoa = tipopessoa.descricao
-        output.append({"ID": users[cont].id,"Nome":users[cont].nome, "CPF": users[cont].cpf, "RG": users[cont].rg, "Tipo": tipopessoa})
-        cont = cont+1
+    try:
+        for u in users:
+            tipopessoa = TipoPessoaTable.query.get(users[cont].tp)
+            tipopessoa = tipopessoa.descricao
+            output.append({"id": users[cont].id,"nome":users[cont].nome, "cpf": users[cont].cpf, "rg": users[cont].rg, "tipo": tipopessoa})
+            cont = cont+1
 
-    return jsonify(output)
+        return jsonify(output)
+
+    except:
+        return jsonify('Sem registros.')
 
 @bp_users.route('/user/mostrar/<id>', methods=['GET'])
 def show_by_id(id):
     user = PessoaTable.query.get(id)
-    tipopessoa = TipoPessoaTable.query.get(user.tp)
 
-    output = {"ID":user.id,"Nome": user.nome, "CPF": user.cpf, "RG": user.rg, "Tipo": tipopessoa.descricao}
-    
-    
-    return jsonify(output)
+    try:
+        tipopessoa = TipoPessoaTable.query.get(user.tp)
+
+        output = {"id":user.id,"nome": user.nome, "cpf": user.cpf, "rg": user.rg, "tipo": tipopessoa.descricao}
+        
+        
+        return jsonify(output)
+    except:
+        return jsonify('Sem registros.')
 
 @bp_users.route('/user/criar', methods=['POST'])
 def create():
@@ -39,16 +47,20 @@ def create():
     foto = request.json['foto']
     tipopessoa = request.json['tipopessoa']
 
-    tp = TipoPessoaTable.query.filter(TipoPessoaTable.descricao==tipopessoa).first()
+    try:
+        tp = TipoPessoaTable.query.filter_by(descricao=tipopessoa).first()
 
-    tipopessoa = tp.id
+        tipopessoa = tp.id
 
-    new_user = PessoaTable(nome,cpf,rg,foto,tipopessoa)
+        new_user = PessoaTable(nome,cpf,rg,foto,tipopessoa)
 
-    db.session.add(new_user)
-    db.session.commit()
+        db.session.add(new_user)
+        db.session.commit()
 
-    return jsonify('deu certo')
+        return jsonify('Pessoa criada com sucesso!')
+
+    except:
+        return jsonify('Erro ao criar pessoa. Verifique as informações inseridas')
 
 @bp_users.route('/user/alterar/<id>', methods=['PUT'])
 def update(id):
@@ -61,31 +73,38 @@ def update(id):
     ft = request.json['foto']
     tp = request.json['tipopessoa']
         
-    if nome != "":
-        user.nome = nome
-    if cpf != "":
-        user.cpf = cpf
-    if rg != "":
-        user.rg = rg
-    if ft != "":
-        user.ft = ft
-    if tp != "":
-        tipopessoa = TipoPessoaTable.query.all()
-        if tp in tipopessoa:
-            tp = tipopessoa.id
+    try:
+        if nome != "":
+            user.nome = nome
+        if cpf != "":
+            user.cpf = cpf
+        if rg != "":
+            user.rg = rg
+        if ft != "":
+            user.ft = ft
+        if tp != "":
+            tipopessoa = TipoPessoaTable.query.all()
+            if tp in tipopessoa:
+                tp = tipopessoa.id
 
-        user.tp = tp
+            user.tp = tp
 
-    db.session.commit()
+        db.session.commit()
 
-    return jsonify('Usuário alterado com sucesso!')
+        return jsonify('Usuário alterado com sucesso!')
     
+    except:
+        return jsonify('Erro ao alterar usuário. Verifique as informações inseridas.')
+
 @bp_users.route('/user/deletar/<id>', methods=['DELETE'])
 def delete(id):
-    user = PessoaTable.query.get(id)
+    try:
+        user = PessoaTable.query.get(id)
 
-    db.session.delete(user)
-    db.session.commit()
+        db.session.delete(user)
+        db.session.commit()
 
-    return jsonify('Usuário deletado com sucesso!')
-    
+        return jsonify('Usuário deletado com sucesso!')
+        
+    except:
+        return jsonify('Erro ao deletar usuário.')    

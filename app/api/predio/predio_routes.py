@@ -11,66 +11,78 @@ def create():
 
     evento = request.json['evento']
 
-    new_predio = PredioTable(evento)
+    try:
+        new_predio = PredioTable(evento)
 
 
-    db.session.add(new_predio)
-    db.session.commit()
+        db.session.add(new_predio)
+        db.session.commit()
 
-    return jsonify('Tudo certo')
+        return jsonify('Prédio criado com sucesso!')
+
+    except:
+        return jsonify('Erro ao criar prédio. Verifique as informações inseridas.')
 
 @bp_predio.route('/predio/alterar/<id>', methods=['PUT'])
 def modify(id):
 
     predio = PredioTable.query.get(id)
-
     evt = request.json ['evento']
 
-    predio.evento = evt
+    try:
+        if evt !='':
+            predio.evento = evt
 
-    db.session.commit()
+        db.session.commit()
 
-    return jsonify('Tudo certo')
+        return jsonify('Informações do prédio alterada com sucesso!')
+
+    except:
+        return jsonify('Erro ao alterar informações do prédio. Verifique as informações inseridas.')
 
 @bp_predio.route('/predio/mostrar', methods=['GET'])
 def show_all():
-    ps = PredioSchema(many=True)
-
     prds = PredioTable.query.all()
-    predios = []
+    output = []
 
     cont = 0 
 
-    for i in prds:
-        predios.append({"predio":prds[cont].id, "evento": prds[cont].evento})
-        cont = cont+1
+    try:
+        for i in prds:
+            output.append({"predio":prds[cont].id, "evento": prds[cont].evento})
+            cont = cont+1
 
 
-    return jsonify(predios)
+        return jsonify(output)
+    except:
+        return jsonify('Sem registros.')
 
 @bp_predio.route('/predio/mostrar/<id>', methods=['GET'])
 def show_by_id(id):
-    ps = PredioSchema()
-    
     predio = PredioTable.query.get(id)
 
-    prd = {
-        "predio":predio.id,
-        "evento":predio.evento
-        }
+    try:
+        output = {
+            "predio":predio.id,
+            "evento":predio.evento
+            }
 
 
-    return jsonify(prd)
+        return jsonify(output)
+
+    except:
+        return jsonify('Sem registro.')
 
 @bp_predio.route('/predio/deletar/<id>', methods=['DELETE'])
 def delete_by_id(id):
 
-    predio = PredioTable.query.get(id)
+    try:
+        predio = PredioTable.query.get(id)
 
-    db.session.delete(predio)
-    db.session.commit()
+        db.session.delete(predio)
+        db.session.commit()
 
-    return jsonify('Tudo certo ')
+        return jsonify('Prédio deletado com sucesso!')
 
-
-
+    except:
+        return jsonify('Erro ao deletar prédio.')

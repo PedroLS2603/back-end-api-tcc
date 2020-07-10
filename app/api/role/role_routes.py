@@ -8,30 +8,46 @@ bp_role = Blueprint('role', __name__)
 
 @bp_role.route('/tipopessoa/mostrar', methods=['GET'])
 def show():
-    tps = TipoPessoaSchema(many=True)
-    tp = TipoPessoaTable.query.all()
-    result = tps.dump(tp)
 
-    return jsonify(result)
+    tp = TipoPessoaTable.query.all()
+    output =[]
+    cont= 0 
+
+    try:
+        for t in tp:
+            output.append({"id": tp.id, "descricao":tp.descricao})
+            cont= cont +1
+
+        return jsonify(output)
+
+    except:
+        return jsonify('Sem registros.')
 
 @bp_role.route('/tipopessoa/mostrar/<id>', methods=['GET'])
 def show_by_id(id):
-    tps = TipoPessoaSchema()
-    tp = TipoPessoaTable.query.get(id)
-    result = tps.dump(tp)
+    try:
+        tp = TipoPessoaTable.query.get(id)
+        output = {"id": tp.id, "descricao":tp.descricao}
 
-    return jsonify(result)
+        return jsonify(output)
+
+    except:
+        return jsonify('Sem registro.')
 
 @bp_role.route('/tipopessoa/criar', methods=['POST'])
 def create():
     descricao = request.json['descricao']
 
-    new_role = TipoPessoaTable(descricao)
+    try:
+        new_role = TipoPessoaTable(descricao)
 
-    db.session.add(new_role)
-    db.session.commit()
+        db.session.add(new_role)
+        db.session.commit()
 
-    return jsonify('Certin certin, meu bom')
+        return jsonify('Tipo criado com sucesso!')
+
+    except:
+        return jsonify('Erro ao criar tipo. Verifique as informações inseridas')
 
 @bp_role.route('/tipopessoa/alterar/<id>', methods=['PUT'])
 def update(id):
@@ -39,18 +55,27 @@ def update(id):
 
     descricao = request.json['descricao']
 
-    tp.descricao = descricao
+    try:
+        if descricao !='':
+            tp.descricao = descricao
 
-    db.session.add(tp)
-    db.session.commit()
-    
-    return jsonify("certin, certin")
+        db.session.add(tp)
+        db.session.commit()
+        
+        return jsonify("Informações do tipo alteradas com sucesso!")
+
+    except:
+        return jsonify('Não foi possível alterar as informações do tipo. Verifique as informações inseridas.')
 
 @bp_role.route('/tipopessoa/delete/<id>', methods=['DELETE'])
 def delete(id):
     role = TipoPessoaTable.query.get(id)
 
-    db.session.delete(role)
-    db.session.commit()
+    try:
+        db.session.delete(role)
+        db.session.commit()
 
-    return jsonify('certin certin')
+        return jsonify('Tipo deletado com sucesso!')
+    
+    except:
+        return jsonify('Erro ao deletar tipo.')

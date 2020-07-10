@@ -17,76 +17,92 @@ def createEntrada():
     prd = request.json['predio']
     cpf = request.json ['cpf']
 
-    pessoa = PessoaTable.query.filter_by(cpf=cpf).first()
+    try:
+        pessoa = PessoaTable.query.filter_by(cpf=cpf).first()
 
-    pessoa = pessoa.id
+        pessoa = pessoa.id
 
-    datahora = datetime.datetime.now()
+        datahora = datetime.datetime.now()
 
 
-    new_entrada = EntradaTable(ap, prd, pessoa, datahora)
+        new_entrada = EntradaTable(ap, prd, pessoa, datahora)
 
-    db.session.add(new_entrada)
-    db.session.commit()
-
-    return jsonify('Tudo certo')
+        db.session.add(new_entrada)
+        db.session.commit()
+    
+        return jsonify('Tudo certo')
+    
+    except:
+        return jsonify("Ocorreu um erro! Caso os dados inseridos sejam válidos, tente novamente dentro de alguns minutos.")
 
 @bp_acesso.route('/acesso/entrada/mostrar', methods=['GET'])
 def show_allEntrada():
     entrds = EntradaTable.query.all()
 
-    entradas = []
+    output = []
     cont = 0
-    for i in entrds:
-        entradas.append({"idacesso":entrds[cont].id, "apartamento":entrds[cont].entrada_idapt, "predio": entrds[cont].entrada_idprd, "pessoa": entrds[cont].entrada_idpes, "datahora": entrds[cont].datahora})
-        
-        #Formatando a data e a hora
-        datahora = entradas[cont]["datahora"]
-        datahora = datahora.strftime('%d/%m/%Y %H:%M')
-        entradas[cont]["datahora"] = datahora
-        
-        #Convertendo a saída de id pra nome da pessoa
-        pessoa = PessoaTable.query.get(entradas[cont]['pessoa'])
-        entradas[cont]["pessoa"] = pessoa.nome
-        
-        
-        
-        cont = cont+1
+    try:
+        for i in entrds:
+            output.append({"id":entrds[cont].id, "apartamento":entrds[cont].entrada_idapt, "predio": entrds[cont].entrada_idprd, "pessoa": entrds[cont].entrada_idpes, "datahora": entrds[cont].datahora})
+            
+            #Formatando a data e a hora
+            datahora = output[cont]["datahora"]
+            datahora = datahora.strftime('%d/%m/%Y %H:%M')
+            output[cont]["datahora"] = datahora
+            
+            #Convertendo a saída de id pra nome da pessoa
+            pessoa = PessoaTable.query.get(output[cont]['pessoa'])
+            output[cont]["pessoa"] = pessoa.nome
+            
+            
+            
+            cont = cont+1
 
 
-    return jsonify(entradas) 
+        return jsonify(output)
+
+    except:
+        return jsonify("Sem registro. Favor verificar as informações inseridas") 
 
 @bp_acesso.route('/acesso/entrada/mostrar/<id>', methods=['GET'])
 def showEntrada_by_id(id):
 
     entrd = EntradaTable.query.get(id)
 
-    entrada = {"idacesso": entrd.id,
-               "apartamento": entrd.entrada_idapt,
-               "predio": entrd.entrada_idprd,
-               "pessoa": entrd.entrada_idpes,
-               "datahora": entrd.datahora
-     }
-    
-    #Convertendo o atributo pessoa do ID para o nome
-    pessoa = PessoaTable.query.get(entrada['pessoa'])
-    entrada['pessoa'] = pessoa.nome
+    try:
+        output = {"id": entrd.id,
+                "apartamento": entrd.entrada_idapt,
+                "predio": entrd.entrada_idprd,
+                "pessoa": entrd.entrada_idpes,
+                "datahora": entrd.datahora
+        }
+        
+        #Convertendo o atributo pessoa do ID para o nome
+        pessoa = PessoaTable.query.get(output['pessoa'])
+        output['pessoa'] = pessoa.nome
 
-    #Formatando a string datahora
-    entrada['datahora'] = entrada['datahora'].strftime('%d/%m/%Y %H:%M')
+        #Formatando a string datahora
+        output['datahora'] = output['datahora'].strftime('%d/%m/%Y %H:%M')
 
+        return jsonify(output)
 
-    return jsonify(entrada)
+    except:
+        return jsonify("Sem registro. Favor verificar as informações inseridas")
 
 @bp_acesso.route('/acesso/entrada/deletar/<id>', methods=['DELETE'])
 def deleteEntrada(id):
 
-    entrada = EntradaTable.query.get(id)
+    try:
+        entrada = EntradaTable.query.get(id)
 
-    db.session.delete(entrada)
-    db.session.commit()
+        db.session.delete(entrada)
+        db.session.commit()
+        
+        return jsonify('Registro deletado com sucesso!')
 
-    return jsonify('Tudo certo')
+    except:
+        return jsonify('Não foi possível deletar o registro')
+
 
 #Rotas de saída
 @bp_acesso.route('/acesso/saida/criar', methods=['POST'])
@@ -94,75 +110,87 @@ def createSaida():
     
     cpf = request.json['cpf']
 
-    pessoa = PessoaTable.query.filter_by(cpf=cpf).first()
-    pessoa = pessoa.id
+    try:
+        pessoa = PessoaTable.query.filter_by(cpf=cpf).first()
+        pessoa = pessoa.id
 
-    entrada = EntradaTable.query.filter_by(entrada_idpes=pessoa).all()
-    entrada.reverse()
-    entrada = entrada[0].id
+        entrada = EntradaTable.query.filter_by(entrada_idpes=pessoa).all()
+        entrada.reverse()
+        entrada = entrada[0].id
 
-    datahora = datetime.datetime.now()
+        datahora = datetime.datetime.now()
 
-    new_saida = SaidaTable(pessoa, entrada, datahora)
+        new_saida = SaidaTable(pessoa, entrada, datahora)
 
-    db.session.add(new_saida)
-    db.session.commit()
+        db.session.add(new_saida)
+        db.session.commit()
 
-    return jsonify('Tudo certo')
+        return jsonify('Tudo certo')
+
+    except:
+        return jsonify('Não foi possível criar o registro')
 
 @bp_acesso.route('/acesso/saida/mostrar', methods=['GET'])
 def show_allSaida():
     sds = SaidaTable.query.all()
 
-    saidas = []
-    cont = 0
-    for i in sds:
-        saidas.append({"idsaida":sds[cont].id, "entrada":sds[cont].saida_ident, "pessoa": sds[cont].saida_idpes, "datahora": sds[cont].datahora})
-        
-        #Formatando a data e a hora
-        datahora = saidas[cont]["datahora"]
-        datahora = datahora.strftime('%d/%m/%Y %H:%M')
-        saidas[cont]["datahora"] = datahora
-        
-        #Convertendo a saída de id pra nome da pessoa
-        pessoa = PessoaTable.query.get(saidas[cont]['pessoa'])
-        saidas[cont]["pessoa"] = pessoa.nome
-        
-        
-        
-        cont = cont+1
+    try:
+        output = []
+        cont = 0
+        for i in sds:
+            output.append({"idsaida":sds[cont].id, "entrada":sds[cont].saida_ident, "pessoa": sds[cont].saida_idpes, "datahora": sds[cont].datahora})
+            
+            #Formatando a data e a hora
+            datahora = output[cont]["datahora"]
+            datahora = datahora.strftime('%d/%m/%Y %H:%M')
+            output[cont]["datahora"] = datahora
+            
+            #Convertendo a saída de id pra nome da pessoa
+            pessoa = PessoaTable.query.get(output[cont]['pessoa'])
+            output[cont]["pessoa"] = pessoa.nome
+            
+            
+            cont = cont+1
 
+        return jsonify(output)
 
-    return jsonify(saidas)
+    except:
+        return jsonify("Sem registros. Favor verificar as informações inseridas")
 
 @bp_acesso.route('/acesso/saida/mostrar/<id>', methods=['GET'])
 def showSaida_by_id(id):
     
     sd = SaidaTable.query.get(id)
 
-    saida = {"idsaida": sd.id,
-               "entrada": sd.saida_ident,
-               "pessoa": sd.saida_idpes,
-               "datahora": sd.datahora
-     }
-    
-    #Convertendo o atributo pessoa do ID para o nome
-    pessoa = PessoaTable.query.get(saida['pessoa'])
-    saida['pessoa'] = pessoa.nome
+    try:
+        output = {"idsaida": sd.id,
+                "entrada": sd.saida_ident,
+                "pessoa": sd.saida_idpes,
+                "datahora": sd.datahora
+        }
+        
+        #Convertendo o atributo pessoa do ID para o nome
+        pessoa = PessoaTable.query.get(output['pessoa'])
+        output['pessoa'] = pessoa.nome
 
-    #Formatando a string datahora
-    saida['datahora'] = saida['datahora'].strftime('%d/%m/%Y %H:%M')
+        #Formatando a string datahora
+        output['datahora'] = output['datahora'].strftime('%d/%m/%Y %H:%M')
 
 
-    return jsonify(saida)
+        return jsonify(output)
+
+    except:
+        return jsonify('Sem registros. Favor verificar as informações inseridas')
 
 @bp_acesso.route('/acesso/saida/deletar/<id>', methods=['DELETE'])
 def deleteSaida(id):
     
-    saida = SaidaTable.query.get(id)
+    try:
+        saida = SaidaTable.query.get(id)
 
-    db.session.delete(saida)
-    db.session.commit()
+        db.session.delete(saida)
+        db.session.commit()
 
-    return jsonify('Tudo certo')
-
+        return jsonify('Registro deletado com sucesso!')
+    except:
+        return jsonify('Não foi possível apagar o registro.')

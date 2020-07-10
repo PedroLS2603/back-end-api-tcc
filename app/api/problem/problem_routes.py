@@ -16,15 +16,16 @@ def create():
     ap = ApartamentoTable.query.get(ap)
     prd = PredioTable.query.get(prd)
 
-    ap = ap.id
-    prd = prd.id
+    try:
+        new_prob = ProblemaTable(dscr, prd.id, ap.id )
 
-    new_prob = ProblemaTable(dscr, prd, ap )
+        db.session.add(new_prob)
+        db.session.commit()
 
-    db.session.add(new_prob)
-    db.session.commit()
+        return jsonify('Problema registrado com sucesso!')
 
-    return jsonify('Tudo certo')
+    except:
+        return jsonify('Erro ao registrar problema. Verifique as informações inseridas')
 
 @bp_problema.route('/problema/mostrar', methods=['GET'])
 def show_all():
@@ -34,36 +35,60 @@ def show_all():
 
     cont = 0
 
-    for problema in problemas:
-        output.append({'id':problemas[cont].id, 'predio':problemas[cont].problema_idprd, 'apartamento': problemas[cont].problema_idapt, 'descricao': problemas[cont].descricao})
-        cont = cont+1
-    return jsonify(output)
+    try:
+        for problema in problemas:
+            output.append({'id':problemas[cont].id, 'predio':problemas[cont].problema_idprd, 'apartamento': problemas[cont].problema_idapt, 'descricao': problemas[cont].descricao})
+            cont = cont+1
+            
+        return jsonify(output)
+
+    except:
+        return jsonify('Sem registros.')
 
 @bp_problema.route('/problema/mostrar/<id>', methods=['GET'])
 def show_by_id(id):
     problema = ProblemaTable.query.get(id)
 
-    output = {'id':problema.id, 'predio':problema.problema_idprd, 'apartamento': problema.problema_idapt, 'descricao': problema.descricao}
+    try:
+        output = {'id':problema.id, 'predio':problema.problema_idprd, 'apartamento': problema.problema_idapt, 'descricao': problema.descricao}
 
-    return jsonify(output)
+        return jsonify(output)
+
+    except:
+        return jsonify('Sem registro.')
 
 @bp_problema.route('/problema/alterar/<id>', methods=['PUT'])
 def modify(id):
     problema = ProblemaTable.query.get(id)
 
-    problema.descricao = request.json['descricao']
-    problema.problema_idapt = request.json['apartamento']
-    problema.problema_idprd = request.json['predio']
+    dscr = request.json['descricao']
+    ap = request.json['apartamento']
+    prd = request.json['predio']
 
-    db.session.commit()
+    try:
+        if dscr !='':
+            problema.descricao = dscr
+        if ap !='':
+            problema.problema_idapt = ap
+        if prd !='':
+            problema.problema_idprd = prd
 
-    return jsonify('Tudo certo')
+        db.session.commit()
+
+        return jsonify('Informações sobre o problema alteradas com sucesso!')
+
+    except:
+        return jsonify('Erro ao alterar informações sobre o problema. Verifique as informações inseridas.')
 
 @bp_problema.route('/problema/deletar/<id>', methods=['DELETE'])
 def delete(id):
-    problema = ProblemaTable.query.get(id)
+    try:
+        problema = ProblemaTable.query.get(id)
 
-    db.session.delete(problema)
-    db.session.commit()
+        db.session.delete(problema)
+        db.session.commit()
 
-    return jsonify('Tudo certo')
+        return jsonify('Problema deletado com sucesso!')
+    
+    except:
+        return jsonify('Erro ao deletar problema.')

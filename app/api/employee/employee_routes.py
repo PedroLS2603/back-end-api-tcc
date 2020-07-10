@@ -14,14 +14,16 @@ def create():
     
     pes = PessoaTable.query.filter_by(cpf=cpf).first()
 
-    pes = pes.id
+    try:
+        new_func = FuncionarioTable(pes.id, funcao)
 
-    new_func = FuncionarioTable(pes, funcao)
+        db.session.add(new_func)
+        db.session.commit()
 
-    db.session.add(new_func)
-    db.session.commit()
-
-    return jsonify('Tudo certo')
+        return jsonify('Funcionário criado com sucesso!')
+    
+    except:
+        return jsonify('Não foi possível criar funcionário.')
 
 @bp_employee.route('/funcionario/mostrar', methods=['GET'])
 def show_all():
@@ -31,14 +33,16 @@ def show_all():
     cont = 0 
     output = []
 
+    try:
+        for f in all_func:
+            pes = PessoaTable.query.get(all_func[cont].func_idpessoa)
+            output.append({"id":func.id, "nome": pes.nome, "funcao": all_func[cont].funcao})
+            cont = cont+1
 
-    for f in all_func:
-        pes = PessoaTable.query.get(all_func[cont].func_idpessoa)
-        pes = pes.nome
-        output.append({"Nome": pes, "Função": all_func[cont].funcao})
-        cont = cont+1
+        return jsonify(output)
 
-    return jsonify({"Funcionários":output})
+    except:
+        return jsonify('Sem registros.')
 
 @bp_employee.route('/funcionario/mostrar/<id>', methods=['GET'])
 def show_by_id(id):
@@ -47,9 +51,13 @@ def show_by_id(id):
     func = FuncionarioTable.query.get(id)
     pes = PessoaTable.query.get(func.func_idpessoa)
 
-    output = {"Nome": pes.nome, "Função": func.funcao}
+    try:
+        output = {"id":func.id, "nome": pes.nome, "funcao": func.funcao}
 
-    return jsonify(output)
+        return jsonify(output)
+
+    except:
+        return jsonify('Sem registro.')
 
 @bp_employee.route('/funcionario/alterar/<id>', methods=['PUT'])
 def modify(id):
@@ -59,23 +67,29 @@ def modify(id):
     funcao = request.json['funcao']
     cpf = request.json['cpf']
 
-    
-    if cpf != "":
-        fc = PessoaTable.query.filter_by(cpf=cpf).first()
-        func.func_idpessoa = fc.id
-    if funcao != '':
-        func.funcao = funcao
+    try:    
+        if cpf != "":
+            fc = PessoaTable.query.filter_by(cpf=cpf).first()
+            func.func_idpessoa = fc.id
+        if funcao != '':
+            func.funcao = funcao
+        db.session.commit()
 
-    db.session.commit()
+        return jsonify('Informações do funcionário alterada com sucesso!')
 
-    return jsonify('Tudo certo')
-    
+    except:
+        return jsonify('Não foi possível alterar as informações do funcionário')
+
 @bp_employee.route('/funcionario/deletar/<id>', methods=['DELETE'])
 def delete(id):
     
-    func = FuncionarioTable.query.get(id)
+    try:
+        func = FuncionarioTable.query.get(id)
 
-    db.session.delete(func)
-    db.session.commit()
+        db.session.delete(func)
+        db.session.commit()
 
-    return jsonify('Tudo certo')
+        return jsonify('Funcionário deletado com sucesos!')
+    
+    except:
+        return jsonify('Erro ao deletar funcionário.')

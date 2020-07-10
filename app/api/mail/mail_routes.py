@@ -12,51 +12,62 @@ def create():
     apartamento = request.json['apartamento']
     predio = request.json['predio']
 
-    morador = MoradorTable.query.filter_by(morador_idapt=apartamento, morador_idprd=predio).first()
-    morador = morador.morador_idpes
+    try:
+        morador = MoradorTable.query.filter_by(morador_idapt=apartamento, morador_idprd=predio).first()
+        morador = morador.morador_idpes
 
-    datahora = datetime.datetime.now()
+        datahora = datetime.datetime.now()
 
-    destinatario = EncomendaTable(morador, datahora)
+        destinatario = EncomendaTable(morador, datahora)
 
-    db.session.add(destinatario)
-    db.session.commit()
+        db.session.add(destinatario)
+        db.session.commit()
 
-    return jsonify("Tudo certo")
+        return jsonify("Registro de encomenda criado com sucesso!")
+    
+    except:
+        return jsonify("Erro ao criar registro de encomenda")
 
 @bp_encomenda.route('/mail/mostrar', methods=['GET'])
 def show_all():
     encomendas = EncomendaTable.query.all()
 
-
     output = []
-    cont = 0 
-    for e in encomendas:
-        pessoa = PessoaTable.query.get(encomendas[cont].encomenda_idpes)
-        pessoa= pessoa.nome 
+    cont = 0
 
-        datahora = encomendas[cont].datahora
-        datahora = datahora.strftime('%d/%m/%Y %H:%M')
+    try:
+        for e in encomendas:
+            pessoa = PessoaTable.query.get(encomendas[cont].encomenda_idpes)
 
-        output.append({"ID":encomendas[cont].id, "Destinatário":pessoa, "Entrega em": datahora })
-        cont = cont+1
+            datahora = encomendas[cont].datahora
+            datahora = datahora.strftime('%d/%m/%Y %H:%M')
 
-    return jsonify({"Encomendas":output})
+            output.append({"id":encomendas[cont].id, "destinatario":pessoa.nome, "datahora": datahora })
+            cont = cont+1
+
+        return jsonify(output)
+
+    except:
+        return jsonify('Sem registros.')
 
 @bp_encomenda.route('/mail/mostrar/<id>', methods=['GET'])
 def show_by_id(id):
     encomenda = EncomendaTable.query.get(id)
     
-    datahora = encomenda.datahora
-    datahora = datahora.strftime('%d/%m/%Y %H:%M')
-    
-    pessoa = PessoaTable.query.get(encomenda.encomenda_idpes)
-    pessoa = pessoa.nome
+    try:
+        datahora = encomenda.datahora
+        datahora = datahora.strftime('%d/%m/%Y %H:%M')
+        
+        pessoa = PessoaTable.query.get(encomenda.encomenda_idpes)
+        pessoa = pessoa.nome
 
-    output = {"ID":encomenda.id, "Destinatário": pessoa, "Entrega em":datahora }
+        output = {"id":encomenda.id, "destinatario": pessoa, "datahora":datahora }
 
 
-    return jsonify(output)
+        return jsonify(output)
+
+    except:
+        return jsonify('Sem registro.')
 
 @bp_encomenda.route('/mail/alterar/<id>', methods=['PUT'])
 def modify(id):
@@ -65,21 +76,29 @@ def modify(id):
 
     encomenda = EncomendaTable.query.get(id)
 
-    if apartamento and predio != "":
-        pessoa = MoradorTable.query.filter_by(morador_idapt=apartamento, morador_idprd=predio).first()
+    try:
+        if apartamento and predio != "":
+            pessoa = MoradorTable.query.filter_by(morador_idapt=apartamento, morador_idprd=predio).first()
+        
+            encomenda.encomenda_idpes = pessoa.morador_idpes
+            encomenda.datahora = datetime.datetime.now()
+
+        db.session.commit()
+
+        return jsonify('Registro de encomenda alterado com sucesso!')
     
-        encomenda.encomenda_idpes = pessoa.morador_idpes
-        encomenda.datahora = datetime.datetime.now()
-
-    db.session.commit()
-
-    return jsonify('Tudo certo')
+    except:
+        return jsonify('Erro ao alterar registro de encomenda, verifique as informações inseridas.')
 
 @bp_encomenda.route('/mail/deletar/<id>', methods=['DELETE'])
 def delete(id):
-    encomenda = EncomendaTable.query.get(id)
+    try:
+        encomenda = EncomendaTable.query.get(id)
 
-    db.session.delete(encomenda)
-    db.session.commit()
+        db.session.delete(encomenda)
+        db.session.commit()
 
-    return jsonify('Tudo certo') 
+        return jsonify('Registro de encomenda deletado com sucesso!')
+    
+    except:
+        return jsonify('Erro ao deletar registro de encomenda.')
