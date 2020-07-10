@@ -10,6 +10,7 @@ from api.employee.employee_routes import bp_employee
 from api.mail.mail_routes import bp_encomenda
 from api.event.event_routes import bp_evento
 from api.convidado.listaConvidado_routes import bp_convidado
+from api.sysaccess.sysaccess_routes import bp_auth
 
 app.register_blueprint(bp_role)
 app.register_blueprint(bp_users)
@@ -22,7 +23,7 @@ app.register_blueprint(bp_employee)
 app.register_blueprint(bp_encomenda)
 app.register_blueprint(bp_evento)
 app.register_blueprint(bp_convidado)
-
+app.register_blueprint(bp_auth)
 
 if __name__ == '__main__':
     app.run()
