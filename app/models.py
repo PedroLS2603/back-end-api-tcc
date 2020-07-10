@@ -34,7 +34,7 @@ class PessoaTable(db.Model):
     nome = db.Column(db.String(45), nullable=False)
     cpf = db.Column(db.String(14), unique=True, nullable=False)
     rg = db.Column(db.String(12), unique=True, nullable=False)
-    foto = db.Column(db.String(80), unique=True, nullable=False)
+    foto = db.Column(db.String(80), nullable=False)
     tp = db.Column(db.Integer, db.ForeignKey('tipopessoa.id'))
 
     #Configuração dos relacionamentos
@@ -97,8 +97,8 @@ class MoradorTable(db.Model):
     __tablename__ = 'morador'
     
     id = db.Column(db.Integer, primary_key=True)
-    morador_idapt = db.Column(db.Integer, db.ForeignKey('apartamento.id'), unique=True, nullable=False)
-    morador_idprd = db.Column(db.Integer, db.ForeignKey('predio.id'), unique=True, nullable=False)
+    morador_idapt = db.Column(db.Integer, db.ForeignKey('apartamento.id'), nullable=False)
+    morador_idprd = db.Column(db.Integer, db.ForeignKey('predio.id'), nullable=False)
     morador_idpes = db.Column(db.Integer, db.ForeignKey('pessoa.id'), unique=True, nullable=False)
 
     #Configuração dos relacionamentos
@@ -175,8 +175,8 @@ class ListaConvidadosTable(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     nome = db.Column(db.String(45), nullable=False)
-    rg = db.Column(db.String(12), unique=True, nullable=False)
-    listaconvidados_idevt = db.Column(db.Integer, db.ForeignKey('evento.id'), unique=True, nullable=False)
+    rg = db.Column(db.String(12), nullable=False)
+    listaconvidados_idevt = db.Column(db.Integer, db.ForeignKey('evento.id'), nullable=False)
 
     def __init__(self, nome, rg, listaconvidados_idevt):
         self.nome = nome 
@@ -187,7 +187,7 @@ class ProblemaTable(db.Model):
     __tablename__ = 'problema'
 
     id = db.Column(db.Integer, primary_key=True)
-    descricao = db.Column(db.String(200), unique=True, nullable=False)
+    descricao = db.Column(db.String(200), nullable=False)
     problema_idprd = db.Column(db.Integer, db.ForeignKey('predio.id'), nullable=False)
     problema_idapt = db.Column(db.Integer, db.ForeignKey('apartamento.id'), nullable=False)
 

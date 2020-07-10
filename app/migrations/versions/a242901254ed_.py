@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: a63ebd354ac8
+Revision ID: a242901254ed
 Revises: 
-Create Date: 2020-07-03 15:37:38.674343
+Create Date: 2020-07-10 11:03:38.442949
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'a63ebd354ac8'
+revision = 'a242901254ed'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -52,7 +52,6 @@ def upgrade():
     sa.ForeignKeyConstraint(['tp'], ['tipopessoa.id'], ),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('cpf'),
-    sa.UniqueConstraint('foto'),
     sa.UniqueConstraint('rg')
     )
     op.create_table('encomenda',
@@ -90,9 +89,7 @@ def upgrade():
     sa.ForeignKeyConstraint(['morador_idpes'], ['pessoa.id'], ),
     sa.ForeignKeyConstraint(['morador_idprd'], ['predio.id'], ),
     sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('morador_idapt'),
-    sa.UniqueConstraint('morador_idpes'),
-    sa.UniqueConstraint('morador_idprd')
+    sa.UniqueConstraint('morador_idpes')
     )
     op.create_table('problema',
     sa.Column('id', sa.Integer(), nullable=False),
@@ -101,8 +98,7 @@ def upgrade():
     sa.Column('problema_idapt', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['problema_idapt'], ['apartamento.id'], ),
     sa.ForeignKeyConstraint(['problema_idprd'], ['predio.id'], ),
-    sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('descricao')
+    sa.PrimaryKeyConstraint('id')
     )
     op.create_table('evento',
     sa.Column('id', sa.Integer(), nullable=False),
@@ -131,10 +127,7 @@ def upgrade():
     sa.Column('rg', sa.String(length=12), nullable=False),
     sa.Column('listaconvidados_idevt', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['listaconvidados_idevt'], ['evento.id'], ),
-    sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('listaconvidados_idevt'),
-    sa.UniqueConstraint('nome'),
-    sa.UniqueConstraint('rg')
+    sa.PrimaryKeyConstraint('id')
     )
     # ### end Alembic commands ###
 
