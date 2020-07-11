@@ -30,10 +30,10 @@ def createEntrada():
         db.session.add(new_entrada)
         db.session.commit()
     
-        return jsonify('Tudo certo')
+        return jsonify({"message":'Registro de entrada criado com sucesso!'})
     
     except:
-        return jsonify("Ocorreu um erro! Caso os dados inseridos sejam válidos, tente novamente dentro de alguns minutos.")
+        return jsonify({"message":"Ocorreu um erro! Caso os dados inseridos sejam válidos, tente novamente dentro de alguns minutos."})
 
 @bp_acesso.route('/acesso/entrada/mostrar', methods=['GET'])
 def show_allEntrada():
@@ -62,7 +62,7 @@ def show_allEntrada():
         return jsonify(output)
 
     except:
-        return jsonify("Sem registro. Favor verificar as informações inseridas") 
+        return jsonify({"message":"Sem registro. Favor verificar as informações inseridas"}) 
 
 @bp_acesso.route('/acesso/entrada/mostrar/<id>', methods=['GET'])
 def showEntrada_by_id(id):
@@ -87,7 +87,7 @@ def showEntrada_by_id(id):
         return jsonify(output)
 
     except:
-        return jsonify("Sem registro. Favor verificar as informações inseridas")
+        return jsonify({"message":"Sem registro. Favor verificar as informações inseridas"})
 
 @bp_acesso.route('/acesso/entrada/deletar/<id>', methods=['DELETE'])
 def deleteEntrada(id):
@@ -98,10 +98,10 @@ def deleteEntrada(id):
         db.session.delete(entrada)
         db.session.commit()
         
-        return jsonify('Registro deletado com sucesso!')
+        return jsonify({"message":'Registro deletado com sucesso!'})
 
     except:
-        return jsonify('Não foi possível deletar o registro')
+        return jsonify({"message":'Não foi possível deletar o registro'})
 
 
 #Rotas de saída
@@ -128,7 +128,7 @@ def createSaida():
         return jsonify('Tudo certo')
 
     except:
-        return jsonify('Não foi possível criar o registro')
+        return jsonify({"message":'Não foi possível criar o registro'})
 
 @bp_acesso.route('/acesso/saida/mostrar', methods=['GET'])
 def show_allSaida():
@@ -155,7 +155,7 @@ def show_allSaida():
         return jsonify(output)
 
     except:
-        return jsonify("Sem registros. Favor verificar as informações inseridas")
+        return jsonify({"message":"Sem registros. Favor verificar as informações inseridas"})
 
 @bp_acesso.route('/acesso/saida/mostrar/<id>', methods=['GET'])
 def showSaida_by_id(id):
@@ -180,7 +180,7 @@ def showSaida_by_id(id):
         return jsonify(output)
 
     except:
-        return jsonify('Sem registros. Favor verificar as informações inseridas')
+        return jsonify({"message":'Sem registros. Favor verificar as informações inseridas'})
 
 @bp_acesso.route('/acesso/saida/deletar/<id>', methods=['DELETE'])
 def deleteSaida(id):
@@ -191,6 +191,6 @@ def deleteSaida(id):
         db.session.delete(saida)
         db.session.commit()
 
-        return jsonify('Registro deletado com sucesso!')
+        return jsonify({"message":'Registro deletado com sucesso!'})
     except:
-        return jsonify('Não foi possível apagar o registro.')
+        return jsonify({"message":'Não foi possível apagar o registro.'})
