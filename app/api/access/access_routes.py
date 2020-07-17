@@ -43,7 +43,7 @@ def show_allEntrada():
     cont = 0
     try:
         for i in entrds:
-            output.append({"id":entrds[cont].id, "apartamento":entrds[cont].entrada_idapt, "predio": entrds[cont].entrada_idprd, "pessoa": entrds[cont].entrada_idpes, "datahora": entrds[cont].datahora})
+            output.append({"id":entrds[cont].id, "apartamento":entrds[cont].entrada_idapt, "predio": entrds[cont].entrada_idprd, "pessoa": entrds[cont].entrada_idpes, "datahora": entrds[cont].datahora, "tipo":"Entrada"})
             
             #Formatando a data e a hora
             datahora = output[cont]["datahora"]
@@ -54,12 +54,9 @@ def show_allEntrada():
             pessoa = PessoaTable.query.get(output[cont]['pessoa'])
             output[cont]["pessoa"] = pessoa.nome
             
-            
-            
             cont = cont+1
 
-
-        return jsonify(output)
+        return jsonify(list(reversed(output)))
 
     except:
         return jsonify({"message":"Sem registro. Favor verificar as informações inseridas"}) 
@@ -75,7 +72,7 @@ def showEntrada_by_id(id):
                 "predio": entrd.entrada_idprd,
                 "pessoa": entrd.entrada_idpes,
                 "datahora": entrd.datahora
-        }
+            }
         
         #Convertendo o atributo pessoa do ID para o nome
         pessoa = PessoaTable.query.get(output['pessoa'])
@@ -125,7 +122,7 @@ def createSaida():
         db.session.add(new_saida)
         db.session.commit()
 
-        return jsonify('Tudo certo')
+        return jsonify({"message":"Registro criado com sucesso!"})
 
     except:
         return jsonify({"message":'Não foi possível criar o registro'})
@@ -138,7 +135,7 @@ def show_allSaida():
         output = []
         cont = 0
         for i in sds:
-            output.append({"idsaida":sds[cont].id, "entrada":sds[cont].saida_ident, "pessoa": sds[cont].saida_idpes, "datahora": sds[cont].datahora})
+            output.append({"idsaida":sds[cont].id, "entrada":sds[cont].saida_ident, "pessoa": sds[cont].saida_idpes, "datahora": sds[cont].datahora, "tipo":"Saída"})
             
             #Formatando a data e a hora
             datahora = output[cont]["datahora"]
@@ -152,7 +149,7 @@ def show_allSaida():
             
             cont = cont+1
 
-        return jsonify(output)
+        return jsonify(list(reversed(output)))
 
     except:
         return jsonify({"message":"Sem registros. Favor verificar as informações inseridas"})
