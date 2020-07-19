@@ -38,11 +38,11 @@ class PessoaTable(db.Model):
     tp = db.Column(db.Integer, db.ForeignKey('tipopessoa.id'))
 
     #Configuração dos relacionamentos
-    funcionario_idpessoa = db.relationship('FuncionarioTable', backref='funcionario_idpessoa')
-    morador_idpessoa = db.relationship('MoradorTable', backref='morador_idpessoa')
+    funcionario_idpessoa = db.relationship('FuncionarioTable', backref='funcionario_idpessoa', single_parent=True, cascade="all, delete-orphan")
+    morador_idpessoa = db.relationship('MoradorTable', backref='morador_idpessoa', single_parent=True, cascade="all, delete-orphan")
     entrada_idpessoa = db.relationship('EntradaTable', backref='entrada_idpessoa')
     saida_idpessoa = db.relationship('SaidaTable', backref='saida_idpessoa')
-    encomenda_idpessoa = db.relationship('EncomendaTable', backref='encomenda_idpessoa')
+    encomenda_idpessoa = db.relationship('EncomendaTable', backref='encomenda_idpessoa', single_parent=True, cascade="all, delete-orphan")
 
     def __init__(self, nome, cpf, rg, foto, tp):
         self.nome = nome
@@ -71,10 +71,10 @@ class PredioTable(db.Model):
 
     #Configuração dos relacionamentos
     apartamento_idpredio = db.relationship('ApartamentoTable', backref='apartamento_idpredio')
-    morador_idpredio = db.relationship('MoradorTable', backref='morador_idpredio')
+    morador_idpredio = db.relationship('MoradorTable', backref='morador_idpredio', single_parent=True, cascade="all, delete-orphan")
     entrada_idpredio = db.relationship('EntradaTable', backref='entrada_idpredio')
-    evento_idpredio = db.relationship('EventoTable', backref='evento_idpredio')
-    problema_idpredio = db.relationship('ProblemaTable', backref='problema_idpredio')
+    evento_idpredio = db.relationship('EventoTable', backref='evento_idpredio', single_parent=True, cascade="all, delete-orphan")
+    problema_idpredio = db.relationship('ProblemaTable', backref='problema_idpredio', single_parent=True, cascade="all, delete-orphan")
 
     def __init__(self, evento):
         self.evento = evento
@@ -88,7 +88,7 @@ class ApartamentoTable(db.Model):
     #Configuração dos relacionamentos
     morador_idapartamento = db.relationship('MoradorTable', backref='morador_idapartamento')
     entrada_idapartamento = db.relationship('EntradaTable', backref='entrada_idapartamento')
-    problema_idapartamento = db.relationship('ProblemaTable', backref='problema_idapartamento')
+    problema_idapartamento = db.relationship('ProblemaTable', backref='problema_idapartamento', single_parent=True, cascade="all, delete-orphan")
 
     def __init__(self, apartamento_idpredio):
         self.apartamento_idpredio = apartamento_idpredio
@@ -102,7 +102,7 @@ class MoradorTable(db.Model):
     morador_idpes = db.Column(db.Integer, db.ForeignKey('pessoa.id'), unique=True, nullable=False)
 
     #Configuração dos relacionamentos
-    evento_idmrd = db.relationship('EventoTable', backref='evento_idmorador')
+    evento_idmrd = db.relationship('EventoTable', backref='evento_idmorador', single_parent=True, cascade="all, delete-orphan")
 
     def __init__(self, morador_idapt, morador_idprd, morador_idpes):
         self.morador_idapt = morador_idapt

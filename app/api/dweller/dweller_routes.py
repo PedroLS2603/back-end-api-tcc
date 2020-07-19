@@ -12,18 +12,18 @@ def create():
     prd = request.json['predio']
     cpf = request.json['cpf']
 
-    pessoa = PessoaTable.query.filter_by(cpf=cpf).first()
+    tp = TipoPessoaTable.query.filter_by(descricao='morador').first()
 
-    try:
-        new_morador = MoradorTable(ap, prd, pessoa.id)
+    pessoa = PessoaTable.query.filter_by(cpf=cpf, tp=tp.id).first()
 
-        db.session.add(new_morador)
-        db.session.commit()
+    new_morador = MoradorTable(ap, prd, pessoa.id)
 
-        return jsonify({"message":'Morador registrado com sucesso!'})
+    db.session.add(new_morador)
+    db.session.commit()
+
+    return jsonify({"message":'Morador registrado com sucesso!'})
     
-    except:
-        return jsonify({"message":'Não foi possível registrar o morador, favor verificar os dados inseridos.'})
+
 
 @bp_morador.route('/morador/mostrar', methods=['GET'])
 def show_all():
@@ -32,15 +32,15 @@ def show_all():
 
     moradores = PessoaTable.query.filter_by(tp=tipopessoa.id).all()
 
+    mrds = MoradorTable.query.all()
 
     try:    
-        mrds = MoradorTable.query.all()
-
         cont = 0 
         output = []
         
         for i in mrds:
-            output.append({"id": mrds[cont].id,"nome":moradores[cont].nome, "cpf":moradores[cont].cpf, "rg":moradores[cont].rg, "foto":moradores[cont].foto, "apartamento":mrds[cont].morador_idapt, "predio": mrds[cont].morador_idprd}) 
+            pessoa = PessoaTable.query.filter_by(id=mrds[cont].morador_idpes).first()
+            output.append({"id": mrds[cont].id,"nome": pessoa.nome, "cpf":pessoa.cpf, "rg":pessoa.rg, "foto":pessoa.foto, "apartamento":mrds[cont].morador_idapt, "predio": mrds[cont].morador_idprd}) 
             cont = cont+1
 
         return jsonify(output)
@@ -57,7 +57,7 @@ def show_by_id(id):
         mrd = PessoaTable.query.get(morador.morador_idpes)
 
 
-        result = {"nome": mrd.nome, "cpf": mrd.cpf, "rg": mrd.rg, "foto": mrd.foto, "predio": morador.morador_idprd, "apartamento": morador.morador_idapt }
+        result = {"id":morador.id, "nome": mrd.nome, "cpf": mrd.cpf, "rg": mrd.rg, "foto": mrd.foto, "predio": morador.morador_idprd, "apartamento": morador.morador_idapt }
 
         return jsonify(result)
 
@@ -80,10 +80,10 @@ def modify(id):
 
         db.session.commit()
 
-        return jsonify({"message":'Informações do morador alteradas com sucesso!'})
+        return jsonify({"message":'Informações do morador alteradas com sucesso!', "status":200})
 
     except:
-        return jsonify({"message":'Erro ao alterar as informações do morador. Verifique as informações inseridas.'})
+        return jsonify({"message":'Erro ao alterar as informações do morador. Verifique as informações inseridas.', "status":400, "apartamento":apt, "predio":prd})
 
 @bp_morador.route('/morador/deletar/<id>', methods=['DELETE'])
 def delete(id):
@@ -94,6 +94,6 @@ def delete(id):
         db.session.delete(morador)
         db.session.commit()
 
-        return jsonify({"message":'Morador deletado com sucesso!'})
+        return jsonify({"message":'Morador deletado com sucesso!',"status": 200, "ID": morador.id})
     except:
-        return jsonify({"message":'Erro ao deletar morador.'})
+        return jsonify({"message":'Erro ao deletar morador.', "status": 400, "ID": morador.id})
