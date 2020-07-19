@@ -30,7 +30,7 @@ def show_all():
 
     tipopessoa = TipoPessoaTable.query.filter_by(descricao='morador').first()
 
-    moradores = PessoaTable.query.filter_by(tp=tipopessoa).all()
+    moradores = PessoaTable.query.filter_by(tp=tipopessoa.id).all()
 
 
     try:    
