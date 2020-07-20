@@ -32,7 +32,7 @@ def show_by_id(id):
     try:
         tipopessoa = TipoPessoaTable.query.get(user.tp)
 
-        output = {"id":user.id,"nome": user.nome, "cpf": user.cpf, "rg": user.rg, "tipo": tipopessoa.descricao}
+        output = {"id":user.id,"nome": user.nome, "cpf": user.cpf, "rg": user.rg, "tipo": tipopessoa.descricao, "foto": user.foto}
         
         
         return jsonify(output)
@@ -72,8 +72,8 @@ def update(id):
     rg = request.json['rg']
     ft = request.json['foto']
     tp = request.json['tipopessoa']
-        
-    try:
+
+    try:    
         if nome != "":
             user.nome = nome
         if cpf != "":
@@ -83,28 +83,23 @@ def update(id):
         if ft != "":
             user.ft = ft
         if tp != "":
-            tipopessoa = TipoPessoaTable.query.all()
-            if tp in tipopessoa:
-                tp = tipopessoa.id
-
-            user.tp = tp
+            tipopessoa = TipoPessoaTable.query.filter_by(descricao=tp).first()
+            user.tp = tipopessoa.id
 
         db.session.commit()
 
-        return jsonify({"message":'Usuário alterado com sucesso!'})
-    
+        return jsonify({"message":'Usuário alterado com sucesso!', "status":200})
     except:
-        return jsonify({"message":'Erro ao alterar usuário. Verifique as informações inseridas.'})
+        return jsonify({"message":'Erro ao alterar as informações do usuário, por favor verifique as informações inseridas.', "status":400})
+    
 
 @bp_users.route('/user/deletar/<id>', methods=['DELETE'])
 def delete(id):
-    try:
-        user = PessoaTable.query.get(id)
+    user = PessoaTable.query.get(id)
 
-        db.session.delete(user)
-        db.session.commit()
+    db.session.delete(user)
+    db.session.commit()
 
-        return jsonify({"message":'Usuário deletado com sucesso!'})
+    return jsonify({"message":'Usuário deletado com sucesso!'})
         
-    except:
-        return jsonify({"message":'Erro ao deletar usuário.'})    
+    

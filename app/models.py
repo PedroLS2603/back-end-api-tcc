@@ -21,7 +21,7 @@ class TipoPessoaTable(db.Model):
     descricao = db.Column(db.String(50), unique=True, nullable=False)
 
     #Configuração dos relacionamentos
-    pessoa = db.relationship('PessoaTable', backref='tipopessoa')
+    pessoa = db.relationship('PessoaTable', backref='tipopessoa', single_parent=True, cascade="all, delete-orphan")
 
     def __init__(self, descricao):
         self.descricao = descricao
@@ -40,8 +40,8 @@ class PessoaTable(db.Model):
     #Configuração dos relacionamentos
     funcionario_idpessoa = db.relationship('FuncionarioTable', backref='funcionario_idpessoa', single_parent=True, cascade="all, delete-orphan")
     morador_idpessoa = db.relationship('MoradorTable', backref='morador_idpessoa', single_parent=True, cascade="all, delete-orphan")
-    entrada_idpessoa = db.relationship('EntradaTable', backref='entrada_idpessoa')
-    saida_idpessoa = db.relationship('SaidaTable', backref='saida_idpessoa')
+    entrada_idpessoa = db.relationship('EntradaTable', backref='entrada_idpessoa', single_parent=True, cascade="all, delete-orphan")
+    saida_idpessoa = db.relationship('SaidaTable', backref='saida_idpessoa', single_parent=True, cascade="all, delete-orphan")
     encomenda_idpessoa = db.relationship('EncomendaTable', backref='encomenda_idpessoa', single_parent=True, cascade="all, delete-orphan")
 
     def __init__(self, nome, cpf, rg, foto, tp):
