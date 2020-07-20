@@ -81,7 +81,7 @@ def update(id):
         if rg != "":
             user.rg = rg
         if ft != "":
-            user.ft = ft
+            user.foto = ft
         if tp != "":
             tipopessoa = TipoPessoaTable.query.filter_by(descricao=tp).first()
             user.tp = tipopessoa.id
@@ -95,11 +95,13 @@ def update(id):
 
 @bp_users.route('/user/deletar/<id>', methods=['DELETE'])
 def delete(id):
-    user = PessoaTable.query.get(id)
+    try:
+        user = PessoaTable.query.get(id)
 
-    db.session.delete(user)
-    db.session.commit()
+        db.session.delete(user)
+        db.session.commit()
 
-    return jsonify({"message":'Usuário deletado com sucesso!'})
+        return jsonify({"message":'Usuário deletado com sucesso!', "status":200})
         
-    
+    except:
+        return jsonify({"message":"Não foi possível deletar o usuário.", "status":400})
