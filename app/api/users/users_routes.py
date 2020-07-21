@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from models import PessoaTable, TipoPessoaTable
 from __init__ import db
 from serializer import PessoaSchema
-
+import os, sys
 bp_users = Blueprint('pessoa', __name__)
 
 @bp_users.route('/user/mostrar', methods=['GET'])
@@ -46,6 +46,9 @@ def create():
     rg = request.json['rg']
     foto = request.json['foto']
     tipopessoa = request.json['tipopessoa']
+
+    foto = os.path.split(foto)
+    foto = foto[1]
 
     try:
         tp = TipoPessoaTable.query.filter_by(descricao=tipopessoa).first()
