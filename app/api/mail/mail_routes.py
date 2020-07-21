@@ -23,10 +23,10 @@ def create():
         db.session.add(destinatario)
         db.session.commit()
 
-        return jsonify("Registro de encomenda criado com sucesso!")
+        return jsonify({"message":"Registro de encomenda criado com sucesso!","status":200})
     
     except:
-        return jsonify("Erro ao criar registro de encomenda")
+        return jsonify({"message":"Erro ao criar registro de encomenda", "status":200})
 
 @bp_encomenda.route('/mail/mostrar', methods=['GET'])
 def show_all():
@@ -54,20 +54,22 @@ def show_all():
 def show_by_id(id):
     encomenda = EncomendaTable.query.get(id)
     
-    try:
-        datahora = encomenda.datahora
-        datahora = datahora.strftime('%d/%m/%Y %H:%M')
+    #try:
+    datahora = encomenda.datahora
+    datahora = datahora.strftime('%d/%m/%Y %H:%M')
         
-        pessoa = PessoaTable.query.get(encomenda.encomenda_idpes)
-        pessoa = pessoa.nome
+    pessoa = PessoaTable.query.get(encomenda.encomenda_idpes)
 
-        output = {"id":encomenda.id, "destinatario": pessoa, "datahora":datahora }
+    local = MoradorTable.query.filter_by(morador_idpes=encomenda.encomenda_idpes).first()
 
 
-        return jsonify(output)
+    output = {"id":encomenda.id, "destinatario": pessoa.nome,"apartamento":local.morador_idapt, "predio":local.morador_idprd ,"datahora":datahora, "cpf": pessoa.cpf }
 
-    except:
-        return jsonify({"message":'Sem registro.'})
+
+    return jsonify(output)
+
+    #except:
+    #    return jsonify({"message":'Sem registro.'})
 
 @bp_encomenda.route('/mail/alterar/<id>', methods=['PUT'])
 def modify(id):
@@ -85,7 +87,7 @@ def modify(id):
 
         db.session.commit()
 
-        return jsonify({"message":'Registro de encomenda alterado com sucesso!'})
+        return jsonify({"message":'Registro de encomenda alterado com sucesso!', "status":200   })
     
     except:
         return jsonify({"message":'Erro ao alterar registro de encomenda, verifique as informações inseridas.'})
