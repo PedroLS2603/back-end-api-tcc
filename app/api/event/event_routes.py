@@ -20,23 +20,21 @@ def create():
     inicio = data+' '+hinicio
     final = data+' '+hfinal
 
-    try:
-        inicio = datetime.datetime.strptime(inicio, '%d/%m/%Y %H:%M')
-        final = datetime.datetime.strptime(final, '%d/%m/%Y %H:%M')
+    #try:
 
-        mrd = PessoaTable.query.filter_by(cpf=cpf).first()
-        mrd = MoradorTable.query.filter_by(morador_idpes=mrd.id).first()
-        mrd = mrd.id
+    mrd = PessoaTable.query.filter_by(cpf=cpf).first()
+    mrd = MoradorTable.query.filter_by(morador_idpes=mrd.id).first()
+    mrd = mrd.id
 
-        new_evento = EventoTable(inicio, final, mrd, predio)
+    new_evento = EventoTable(inicio, final, mrd, predio)
 
-        db.session.add(new_evento)
-        db.session.commit() 
+    db.session.add(new_evento)
+    db.session.commit() 
         
-        return jsonify({"message":'Evento criado com sucesso!'})
+    return jsonify({"message":'Evento criado com sucesso!'})
     
-    except:
-        return jsonify({"message":'Erro ao criar evento. Verifique as informações inseridas e se a data e horário estão disponíveis.'})
+    #except:
+        #return jsonify({"message":'Erro ao criar evento. Verifique as informações inseridas e se a data e horário estão disponíveis.'})
 
 @bp_evento.route('/evento/mostrar', methods=['GET'])
 def show_all():
@@ -111,10 +109,10 @@ def modify(id):
 
         db.session.commit()
         
-        return jsonify({"message":'Informações do evento alteradas com sucesso!'})
+        return jsonify({"message":'Informações do evento alteradas com sucesso!', "status":200})
     
     except:
-        return jsonify({"message":'Não foi possível alterar as informações do evento. Verifique as informações inseridas.'})
+        return jsonify({"message":'Não foi possível alterar as informações do evento. Verifique as informações inseridas.', "status":200})
 
 @bp_evento.route('/evento/deletar/<id>', methods=['DELETE'])
 def delete(id):
@@ -125,7 +123,7 @@ def delete(id):
         db.session.delete(evento)
         db.session.commit()
 
-        return jsonify({"message":'Evento deletado com sucesso!'})
+        return jsonify({"message":'Evento deletado com sucesso!',"status":200})
     
     except:
-        return jsonify({"message":'Erro ao deletar evento.'})
+        return jsonify({"message":'Erro ao deletar evento.', "status":400})
