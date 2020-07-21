@@ -36,7 +36,7 @@ def show_all():
     try:
         for f in all_func:
             pes = PessoaTable.query.get(all_func[cont].func_idpessoa)
-            output.append({"id":func.id, "nome": pes.nome, "funcao": all_func[cont].funcao})
+            output.append({"id":all_func[cont].id, "nome": pes.nome, "funcao": all_func[cont].funcao})
             cont = cont+1
 
         return jsonify(output)
@@ -52,12 +52,11 @@ def show_by_id(id):
     pes = PessoaTable.query.get(func.func_idpessoa)
 
     try:
-        output = {"id":func.id, "nome": pes.nome, "funcao": func.funcao}
-
+        output = {"id":func.id, "foto":pes.foto, "nome": pes.nome, "funcao": func.funcao, "cpf":pes.cpf, "rg":pes.rg}
         return jsonify(output)
 
     except:
-        return jsonify({"message":'Sem registro.'})
+       return jsonify({"message":'Sem registro.'})
 
 @bp_employee.route('/funcionario/alterar/<id>', methods=['PUT'])
 def modify(id):
@@ -65,20 +64,16 @@ def modify(id):
     func = FuncionarioTable.query.get(id)
 
     funcao = request.json['funcao']
-    cpf = request.json['cpf']
 
     try:    
-        if cpf != "":
-            fc = PessoaTable.query.filter_by(cpf=cpf).first()
-            func.func_idpessoa = fc.id
         if funcao != '':
             func.funcao = funcao
         db.session.commit()
 
-        return jsonify({"message":'Informações do funcionário alterada com sucesso!'})
+        return jsonify({"message":'Informações do funcionário alterada com sucesso!',"status": 200})
 
     except:
-        return jsonify({"message":'Não foi possível alterar as informações do funcionário'})
+        return jsonify({"message":'Não foi possível alterar as informações do funcionário', "status": 400})
 
 @bp_employee.route('/funcionario/deletar/<id>', methods=['DELETE'])
 def delete(id):
@@ -89,7 +84,7 @@ def delete(id):
         db.session.delete(func)
         db.session.commit()
 
-        return jsonify({"message":'Funcionário deletado com sucesos!'})
+        return jsonify({"message":'Funcionário deletado com sucesos!', "status":200})
     
     except:
-        return jsonify({"message":'Erro ao deletar funcionário.'})
+        return jsonify({"message":'Erro ao deletar funcionário.', "status": 400})
